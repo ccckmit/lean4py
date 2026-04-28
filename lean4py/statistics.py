@@ -81,3 +81,27 @@ def linear_regression(x: List[float], y: List[float]) -> Tuple[float, float]:
     slope = (n * sum_xy - sum_x * sum_y) / denominator
     intercept = (sum_y - slope * sum_x) / n
     return (slope, intercept)
+
+
+def skewness(data: List[float]) -> float:
+    """Sample skewness (Fisher-Pearson)."""
+    if len(data) < 3:
+        return 0.0
+    n = len(data)
+    m = mean(data)
+    s = std_dev(data)
+    if s == 0:
+        return 0.0
+    return (n / ((n-1) * (n-2))) * sum(((x - m) / s) ** 3 for x in data)
+
+
+def kurtosis(data: List[float]) -> float:
+    """Sample kurtosis (excess kurtosis)."""
+    if len(data) < 4:
+        return 0.0
+    n = len(data)
+    m = mean(data)
+    s = std_dev(data)
+    if s == 0:
+        return 0.0
+    return (n*(n+1) / ((n-1)*(n-2)*(n-3))) * sum((x - m) ** 4 for x in data) / (s ** 4) - 3*(n-1)**2 / ((n-2)*(n-3))

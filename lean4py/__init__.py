@@ -238,7 +238,15 @@ from lean4py.graph_theory import (
     complement_graph,
 )
 
-__version__ = "0.7.0"
+from lean4py.statistics import (
+    mean, median, mode,
+    variance, std_dev,
+    covariance, correlation,
+    linear_regression,
+    skewness, kurtosis,
+)
+
+__version__ = "0.8.0"
 __all__ = [
     "Prop", "Prop_var", "implies", "and_", "or_", "not_", "iff",
     "Theorem", "ProofStep", "assume", "have", "exact", "apply", "rfl", "simp", "prove",
@@ -292,7 +300,16 @@ __all__ = [
     "bayes_theorem", "hypothesis_test", "confidence_interval",
     "Graph", "Vertex", "Edge",
     "bfs", "dfs", "shortest_path", "dijkstra",
-    "is_connected", "is_bipartite", "has_cycle",
-    "topological_sort", "spanning_tree", "minimum_spanning_tree",
+    "bellman_ford", "is_connected", "is_bipartite",
+    "connected_components", "has_cycle",
+    "topological_sort", "eulerian_path",
+    "spanning_tree", "minimum_spanning_tree",
     "is_complete", "graph_clique",
+    "is_eulerian", "graph_coloring",
+    "complement_graph",
+    "mean", "median", "mode",
+    "variance", "std_dev",
+    "covariance", "correlation",
+    "linear_regression",
+    "skewness", "kurtosis",
 ]

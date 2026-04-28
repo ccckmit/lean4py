@@ -116,16 +116,34 @@ def bezout_identity(a: Integer, b: Integer) -> Tuple[Integer, Integer, Integer]:
     x, y, d = extended_gcd(a.n, b.n)
     return (Integer(x), Integer(y), Integer(d))
 
-def is_prime(n: Integer) -> bool:
+def is_prime(n: Integer, k: int = 5) -> bool:
+    """Miller-Rabin probabilistic primality test."""
     v = n.n
     if v < 2:
         return False
-    if v == 2:
+    if v == 2 or v == 3:
         return True
     if v % 2 == 0:
         return False
-    for i in range(3, int(v ** 0.5) + 1, 2):
-        if v % i == 0:
+    
+    # Write v-1 = d * 2^r
+    d = v - 1
+    r = 0
+    while d % 2 == 0:
+        d //= 2
+        r += 1
+    
+    import random
+    for _ in range(k):
+        a = random.randrange(2, v-1)
+        x = pow(a, d, v)
+        if x == 1 or x == v-1:
+            continue
+        for _ in range(r-1):
+            x = (x * x) % v
+            if x == v-1:
+                break
+        else:
             return False
     return True
 

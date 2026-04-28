@@ -191,16 +191,32 @@ def det(A: Matrix) -> float:
     if A.rows != A.cols:
         raise ValueError("Determinant only defined for square matrices")
     n = A.rows
-    if n == 1:
-        return A.data[0][0]
-    if n == 2:
-        return A.data[0][0] * A.data[1][1] - A.data[0][1] * A.data[1][0]
-    result = 0
-    for j in range(n):
-        minor = matrix_minor(A, 0, j)
-        cofactor = ((-1) ** j) * det(minor)
-        result += A.data[0][j] * cofactor
-    return result
+    if n <= 4:  # Small matrices use recursive
+        if n == 1:
+            return A.data[0][0]
+        if n == 2:
+            return A.data[0][0] * A.data[1][1] - A.data[0][1] * A.data[1][0]
+        # Recursive cofactor expansion
+        result = 0.0
+        for j in range(n):
+            minor = matrix_minor(A, 0, j)
+            cofactor = ((-1) ** j) * det(minor)
+            result += A.data[0][j] * cofactor
+        return result
+    else:
+        try:
+            import numpy as np
+            return float(np.linalg.det(np.array(A.data)))
+        except ImportError:
+            import warnings
+            warnings.warn("det() is slow for large matrices without numpy. Install numpy for acceleration.")
+            # Fall back to recursive
+            result = 0.0
+            for j in range(n):
+                minor = matrix_minor(A, 0, j)
+                cofactor = ((-1) ** j) * det(minor)
+                result += A.data[0][j] * cofactor
+            return result
 
 def matrix_minor(A: Matrix, i: int, j: int) -> Matrix:
     n = A.rows

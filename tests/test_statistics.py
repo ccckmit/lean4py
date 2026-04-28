@@ -1,7 +1,10 @@
 import pytest
 from lean4py.statistics import (
-    mean, median, mode, variance, std_dev,
-    covariance, correlation, linear_regression
+    mean, median, mode,
+    variance, std_dev,
+    covariance, correlation,
+    linear_regression,
+    skewness, kurtosis,
 )
 
 
@@ -135,3 +138,23 @@ class TestLinearRegression:
         slope, intercept = linear_regression(x, y)
         assert abs(slope + 2.0) < 0.01
         assert abs(intercept - 8.0) < 0.01
+
+class TestSkewnessKurtosis:
+    def test_skewness_symmetric(self):
+        data = [1, 2, 3, 4, 5]
+        assert abs(skewness(data)) < 1e-10
+
+    def test_skewness_positive(self):
+        data = [1, 1, 1, 2, 5]
+        assert skewness(data) > 0
+
+    def test_kurtosis_normal(self):
+        data = [1, 2, 3, 4, 5]
+        k = kurtosis(data)
+        assert -2 < k < 1  # Excess kurtosis near 0 for uniform-ish data
+
+    def test_skewness_empty(self):
+        assert skewness([]) == 0.0
+
+    def test_kurtosis_empty(self):
+        assert kurtosis([]) == 0.0
