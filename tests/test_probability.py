@@ -3,8 +3,8 @@ import math
 from lean4py.probability import (
     ProbabilitySpace, Event, RandomVariable,
     ExpectedValue, Variance, StandardDeviation, Covariance, Correlation,
-    NormalDistribution, BinomialDistribution, PoissonDistribution, UniformDistribution,
-    bayes_theorem, law_of_total_probability, hypothesis_test, confidence_interval
+    NormalDistribution, BinomialDistribution, PoissonDistribution, UniformDistribution, ExponentialDistribution,
+    bayes_theorem, law_of_total_probability, hypothesis_test, confidence_interval,
 )
 
 class TestProbabilitySpace:
@@ -139,3 +139,27 @@ class TestConfidenceInterval:
         lower, upper = confidence_interval(sample, 0.95)
         assert lower < upper
         assert 10.0 >= lower and 10.0 <= upper
+class TestExponentialDistribution:
+    def test_exponential_repr(self):
+        dist = ExponentialDistribution(2.0)
+        assert "2.0" in repr(dist)
+
+    def test_exponential_pdf(self):
+        dist = ExponentialDistribution(2.0)
+        assert abs(dist.pdf(0) - 2.0) < 1e-10
+        assert abs(dist.pdf(1) - 2.0 * math.exp(-2.0)) < 1e-10
+        assert dist.pdf(-1) == 0.0
+
+    def test_exponential_cdf(self):
+        dist = ExponentialDistribution(2.0)
+        assert abs(dist.cdf(0)) < 1e-10
+        assert abs(dist.cdf(1) - (1 - math.exp(-2.0))) < 1e-10
+        assert dist.cdf(-1) == 0.0
+
+    def test_exponential_mean(self):
+        dist = ExponentialDistribution(2.0)
+        assert abs(dist.mean() - 0.5) < 1e-10
+
+    def test_exponential_variance(self):
+        dist = ExponentialDistribution(2.0)
+        assert abs(dist.variance() - 0.25) < 1e-10

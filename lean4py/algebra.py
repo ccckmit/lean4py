@@ -150,7 +150,7 @@ class Field(Ring):
         if self.mul_id is None:
             return False
         for a in self.carrier:
-            if a == self.add_id:
+            if a == self.identity:  # Use self.identity (from Ring/Group)
                 continue
             if self.mul_inv(a) not in self.carrier:
                 return False

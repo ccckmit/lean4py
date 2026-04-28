@@ -233,9 +233,12 @@ from lean4py.graph_theory import (
     minimum_spanning_tree,
     is_complete,
     graph_clique,
+    is_eulerian,
+    graph_coloring,
+    complement_graph,
 )
 
-__version__ = "0.6.0"
+__version__ = "0.7.0"
 __all__ = [
     "Prop", "Prop_var", "implies", "and_", "or_", "not_", "iff",
     "Theorem", "ProofStep", "assume", "have", "exact", "apply", "rfl", "simp", "prove",

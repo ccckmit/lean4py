@@ -307,7 +307,7 @@ def product_func(f: Function, g: Function) -> Function:
 
 def ratio_test(a_n: List[float]) -> str:
     """Ratio test for series convergence.
-
+    
     Returns: "converges", "diverges", or "inconclusive"
     """
     if len(a_n) < 2:
@@ -315,7 +315,9 @@ def ratio_test(a_n: List[float]) -> str:
     ratios = [abs(a_n[i+1] / a_n[i]) for i in range(len(a_n)-1) if a_n[i] != 0]
     if not ratios:
         return "inconclusive"
-    avg_ratio = sum(ratios) / len(ratios)
+    # Use the last few ratios (closer to limit)
+    last_ratios = ratios[-min(5, len(ratios)):]
+    avg_ratio = sum(last_ratios) / len(last_ratios)
     if avg_ratio < 1:
         return "converges"
     elif avg_ratio > 1:

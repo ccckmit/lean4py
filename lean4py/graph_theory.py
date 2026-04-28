@@ -454,3 +454,66 @@ def complement_graph(g: Graph) -> Graph:
     missing = [(u, v) for u, v in all_edges if v not in g.neighbors(u) or u not in g.neighbors(v)]
     comp = Graph(vertices=list(g.vertices), edges=missing, directed=g.directed)
     return comp
+
+
+def is_eulerian(g: Graph) -> Tuple[bool, str]:
+    """Check if graph has Eulerian circuit/path.
+
+    Returns: (True, "circuit") if Eulerian circuit exists
+            (True, "path") if Eulerian path exists
+            (False, "none") otherwise
+    """
+    # Check connected (ignore isolated vertices)
+    non_isolated = [v for v in g.vertices if g.degree(v) > 0]
+    if len(non_isolated) == 0:
+        return (True, "circuit")
+
+    # Check if all non-isolated vertices are in the same connected component
+    visited = set()
+    queue = [non_isolated[0]]
+    while queue:
+        v = queue.pop(0)
+        if v not in visited:
+            visited.add(v)
+            for neighbor in g.neighbors(v):
+                if neighbor not in visited and g.degree(neighbor) > 0:
+                    queue.append(neighbor)
+
+    for v in non_isolated:
+        if v not in visited:
+            return (False, "none")
+
+    # Count vertices with odd degree
+    odd_degree = sum(1 for v in non_isolated if g.degree(v) % 2 != 0)
+
+    if odd_degree == 0:
+        return (True, "circuit")
+    elif odd_degree == 2:
+        return (True, "path")
+    else:
+        return (False, "none")
+
+
+def graph_coloring(g: Graph, strategy: str = 'greedy') -> Dict[Any, int]:
+    """Vertex coloring using specified strategy.
+
+    Args:
+        g: Graph to color
+        strategy: 'greedy' (default)
+
+    Returns:
+        Dict mapping vertices to color indices (0, 1, 2, ...)
+    """
+    if strategy != 'greedy':
+        raise ValueError(f"Unknown strategy: {strategy}")
+
+    colors = {}
+    for v in g.vertices:
+        # Find neighbor colors
+        neighbor_colors = {colors.get(n) for n in g.neighbors(v) if n in colors}
+        # Assign smallest available color
+        color = 0
+        while color in neighbor_colors:
+            color += 1
+        colors[v] = color
+    return colors

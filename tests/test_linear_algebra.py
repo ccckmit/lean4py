@@ -8,7 +8,7 @@ from lean4py.linear_algebra import (
     det, matrix_minor, matrix_inverse, trace,
     rank, nullity, eigenvalues, eigenvectors,
     is_linearly_independent, span, is_orthogonal, is_orthonormal,
-    LinearMap, linear_map
+    LinearMap, linear_map, characteristic_polynomial, matrix_adjoint
 )
 
 class TestVector:
@@ -236,3 +236,37 @@ class TestIdentityMatrix:
                     assert I.data[i][j] == 1
                 else:
                     assert I.data[i][j] == 0
+class TestTrace:
+    def test_trace_2x2(self):
+        A = Matrix(2, 2, [[1, 2], [3, 4]])
+        assert trace(A) == 5
+
+    def test_trace_3x3(self):
+        A = Matrix(3, 3, [[1, 0, 0], [0, 2, 0], [0, 0, 3]])
+        assert trace(A) == 6
+
+
+class TestMatrixAdjoint:
+    def test_adjoint_2x2(self):
+        A = Matrix(2, 2, [[1, 2], [3, 4]])
+        adj = matrix_adjoint(A)
+        assert adj.rows == 2
+        assert adj.cols == 2
+
+
+class TestCharacteristicPolynomial:
+    def test_char_poly_1x1(self):
+        A = Matrix(1, 1, [[5]])
+        coeffs = characteristic_polynomial(A)
+        assert len(coeffs) == 2
+        assert abs(coeffs[0] - 1.0) < 1e-10
+        assert abs(coeffs[1] + 5.0) < 1e-10
+
+    def test_char_poly_2x2(self):
+        A = Matrix(2, 2, [[1, 2], [3, 4]])
+        coeffs = characteristic_polynomial(A)
+        assert len(coeffs) == 3
+        # λ^2 - trace*λ + det = 0
+        assert abs(coeffs[0] - 1.0) < 1e-10
+        assert abs(coeffs[1] + 5.0) < 1e-10
+        assert abs(coeffs[2] - (-2.0)) < 1e-10

@@ -87,3 +87,44 @@ class TestAlgebraicProperties:
     def test_abelian_check(self):
         Z = AbelianGroup('Z', {1, 2, 3}, lambda a, b: (a + b) % 3, 0, lambda a: (3 - a) % 3)
         assert Z.is_abelian() is True
+
+
+class TestRingProperties:
+    def test_ring_distributive(self):
+        Z6 = Ring('Z6', {0, 1, 2, 3, 4, 5},
+                 lambda a, b: (a + b) % 6, 0, lambda a: (6 - a) % 6,
+                 lambda a, b: (a * b) % 6, 1)
+        # Test distributivity: a*(b+c) == a*b + a*c
+        for a in Z6.carrier:
+            for b in Z6.carrier:
+                for c in Z6.carrier:
+                    left = Z6.mul(a, Z6.op(b, c))
+                    right = Z6.op(Z6.mul(a, b), Z6.mul(a, c))
+                    assert left == right
+
+    def test_ring_identity(self):
+        Z6 = Ring('Z6', {0, 1, 2, 3, 4, 5},
+                 lambda a, b: (a + b) % 6, 0, lambda a: (6 - a) % 6,
+                 lambda a, b: (a * b) % 6, 1)
+        assert Z6.has_identity() is True
+        assert Z6.identity == 0
+
+
+class TestFieldProperties:
+    def test_field_is_ring(self):
+        # Field should satisfy ring properties
+        def add(a, b): return (a+b)%3
+        def neg(a): return (3-a)%3
+        def mul(a, b): return (a*b)%3
+        F = Field('F3', {0,1,2}, add, 0, neg, mul, 1,
+                  lambda a: None if a==0 else (1 if a==1 else 2))
+        assert F.is_field() is True
+
+    def test_field_not_ring(self):
+        # Not a field (multiplication not closed)
+        def add(a, b): return (a+b)%3
+        def neg(a): return (3-a)%3
+        def mul(a, b): return (a*b)%2  # Wrong modulus!
+        F = Field('F3', {0,1,2}, add, 0, neg, mul, 1,
+                  lambda a: None if a==0 else (1 if a==1 else 2))
+        assert F.is_field() is False

@@ -6,7 +6,8 @@ from lean4py.real_analysis import (
     series_sum, infinite_series_sum, converges,
     is_continuous, is_differentiable, taylor_series,
     lhopital_limit, sequence_limit, is_monotonic, is_bounded,
-    Sequence, mclaurin_series, Function, compose, sum_func, product_func
+    Sequence, mclaurin_series, Function, compose, sum_func, product_func,
+    ratio_test, root_test,
 )
 
 class TestReal:
@@ -159,3 +160,38 @@ class TestRiemannSum:
         f = lambda x: x**2
         result = riemann_sum(f, 0, 1, n=100, method='right')
         assert abs(result.value - 0.33835) < 0.01
+class TestRatioTest:
+    def test_converges(self):
+        # Geometric series: a_n = 1/2^n
+        a_n = [1.0/(2**n) for n in range(1, 11)]
+        result = ratio_test(a_n)
+        assert result == "converges"
+
+    def test_diverges(self):
+        # a_n = 2^n (grows exponentially, ratio = 2 > 1)
+        a_n = [2.0**n for n in range(1, 11)]
+        result = ratio_test(a_n)
+        assert result == "diverges"
+
+    def test_inconclusive(self):
+        # Empty or single element
+        result = ratio_test([])
+        assert result == "inconclusive"
+
+
+class TestRootTest:
+    def test_converges(self):
+        # Geometric series: a_n = (1/2)^n
+        a_n = [(1.0/2)**n for n in range(1, 11)]
+        result = root_test(a_n)
+        assert result == "converges"
+
+    def test_diverges(self):
+        # a_n = 2^n
+        a_n = [2.0**n for n in range(1, 11)]
+        result = root_test(a_n)
+        assert result == "diverges"
+
+    def test_inconclusive(self):
+        result = root_test([])
+        assert result == "inconclusive"

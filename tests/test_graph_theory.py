@@ -5,7 +5,8 @@ from lean4py.graph_theory import (
     bfs, dfs, shortest_path, dijkstra, bellman_ford,
     is_connected, is_bipartite, connected_components, has_cycle,
     topological_sort, eulerian_path, spanning_tree, minimum_spanning_tree,
-    is_complete, complement_graph
+    is_complete, graph_clique, complement_graph,
+    is_eulerian, graph_coloring,
 )
 
 class TestGraphInit:
@@ -187,3 +188,88 @@ class TestDirectedGraph:
         g = Graph(vertices=[1, 2, 3], edges=[(1, 2), (2, 3)], directed=True)
         result = bfs(g, 1)
         assert result == [1, 2, 3]
+
+
+class TestEulerian:
+    def test_eulerian_circuit(self):
+        # Triangle with all vertices degree 2
+        g = Graph(vertices=[1, 2, 3], edges=[(1, 2), (2, 3), (3, 1)])
+        result, type_ = is_eulerian(g)
+        assert result is True
+        assert type_ == "circuit"
+
+    def test_eulerian_path(self):
+        # Path: 1-2-3-4 (vertices 2 and 3 have degree 2, 1 and 4 have degree 1)
+        g = Graph(vertices=[1, 2, 3, 4], edges=[(1, 2), (2, 3), (3, 4)])
+        result, type_ = is_eulerian(g)
+        assert result is True
+        assert type_ == "path"
+
+    def test_not_eulerian(self):
+        # Graph with 4 vertices having odd degree (no Eulerian path or circuit)
+        # Vertex 1: degree 3, Vertex 2: degree 3, Vertex 3: degree 2, Vertex 4: degree 2
+        g = Graph(vertices=[1,2,3,4,5], edges=[(1,2),(2,3),(3,1),(1,4),(2,5)])
+        result, type_ = is_eulerian(g)
+        assert result is False
+        assert type_ == "none"
+
+    def test_eulerian_empty(self):
+        g = Graph(vertices=[])
+        result, type_ = is_eulerian(g)
+        assert result is True
+        assert type_ == "circuit"
+
+
+class TestGraphColoring:
+    def test_coloring_bipartite(self):
+        # Bipartite graph K2,2
+        g = Graph(vertices=[1, 2, 3, 4], edges=[(1, 3), (1, 4), (2, 3), (2, 4)])
+        colors = graph_coloring(g)
+        # Adjacent vertices should have different colors
+        for u in g.vertices:
+            for v in g.neighbors(u):
+                if u < v:  # Avoid duplicate checks
+                    assert colors[u] != colors[v]
+        # Should use at most 2 colors
+        assert len(set(colors.values())) <= 2
+
+    def test_coloring_complete(self):
+        # Complete graph K3 needs 3 colors
+        g = Graph(vertices=[1, 2, 3], edges=[(1, 2), (2, 3), (3, 1)])
+        colors = graph_coloring(g)
+        assert len(set(colors.values())) == 3
+
+    def test_coloring_single_vertex(self):
+        g = Graph(vertices=[1])
+        colors = graph_coloring(g)
+        assert colors[1] == 0
+
+    def test_coloring_empty(self):
+        g = Graph(vertices=[])
+        colors = graph_coloring(g)
+        assert colors == {}
+
+
+class TestGraphClique:
+    def test_clique_single(self):
+        g = Graph(vertices=[1])
+        result = graph_clique(g)
+        assert result == [1]
+
+    def test_clique_triangle(self):
+        g = Graph(vertices=[1, 2, 3], edges=[(1, 2), (2, 3), (3, 1)])
+        result = graph_clique(g)
+        assert len(result) == 3
+
+    def test_clique_empty(self):
+        g = Graph(vertices=[])
+        result = graph_clique(g)
+        assert result == []
+
+
+class TestComplementGraph:
+    def test_complement_simple(self):
+        g = Graph(vertices=[1, 2, 3], edges=[(1, 2)])
+        comp = complement_graph(g)
+        # Check that edge 2-3 or 3-2 is in complement's adjacency
+        assert 3 in comp.adjacency.get(1, set()) or 1 in comp.adjacency.get(3, set())
