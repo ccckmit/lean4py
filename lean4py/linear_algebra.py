@@ -287,6 +287,12 @@ def span(vectors: List[Vector]) -> int:
     return rank(A)
 
 def eigenvalues(M: Matrix) -> List[float]:
+    """Compute eigenvalues of a square matrix.
+
+    For 1x1 and 2x2 matrices, uses analytical formulas.
+    For larger matrices, uses numpy.linalg.eigvals if available,
+    otherwise returns an empty list.
+    """
     if M.rows != M.cols:
         raise ValueError("Eigenvalues only for square matrices")
     n = M.rows
@@ -301,7 +307,13 @@ def eigenvalues(M: Matrix) -> List[float]:
         if disc < 0:
             return []
         return [(trace + disc ** 0.5) / 2, (trace - disc ** 0.5) / 2]
-    return []
+    try:
+        import numpy as np
+        np_matrix = np.array(M.data)
+        eigvals = np.linalg.eigvals(np_matrix)
+        return [complex(eig).real if abs(complex(eig).imag) < 1e-10 else complex(eig) for eig in eigvals]
+    except ImportError:
+        return []
 
 def eigenvectors(M: Matrix, eigenvalue: float) -> List[Vector]:
     if M.rows != M.cols:
@@ -357,3 +369,30 @@ class LinearMap:
 
 def linear_map(A: Matrix) -> LinearMap:
     return LinearMap(A)
+
+
+def characteristic_polynomial(M: Matrix) -> List[float]:
+    """Compute the characteristic polynomial det(M - λI) coefficients.
+
+    Returns coefficients [a_n, a_{n-1}, ..., a_0] for polynomial a_n*λ^n + ...
+    For 2x2, returns [1.0, -trace(M), det(M)]
+    For larger matrices, requires numpy.
+    """
+    if M.rows != M.cols:
+        raise ValueError("Square matrix required")
+    n = M.rows
+    if n == 1:
+        return [1.0, -M.data[0][0]]
+    if n == 2:
+        trace_val = sum(M.data[i][i] for i in range(2))
+        det_val = det(M)
+        return [1.0, -trace_val, det_val]
+    try:
+        import numpy as np
+        from numpy.polynomial.polynomial import poly_from_roots
+        np_matrix = np.array(M.data)
+        eigvals = np.linalg.eigvals(np_matrix)
+        coeffs = poly_from_roots(eigvals)
+        return list(coeffs)
+    except ImportError:
+        return []

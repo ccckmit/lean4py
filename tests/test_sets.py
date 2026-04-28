@@ -1,7 +1,8 @@
 import pytest
 from lean4py.sets import (
     Set, Set_from, in_, subset, union, intersection, complement,
-    difference, cartesian, power_set, empty_set,
+    difference, symmetric_difference, is_disjoint, is_overlapping,
+    cartesian, power_set, empty_set,
 )
 
 
@@ -75,9 +76,13 @@ class TestSetOps:
         assert 2 not in D
 
     def test_complement(self):
+        U = Set_from([1, 2, 3, 4, 5])
         A = Set_from([1, 2, 3])
-        C = complement(A)
-        assert isinstance(C, Set)
+        C = complement(A, U)
+        assert 4 in C
+        assert 5 in C
+        assert 1 not in C
+        assert len(C._elems) == 2
 
 
 class TestSetRelations:
@@ -151,3 +156,47 @@ class TestInFunction:
     def test_in_false(self):
         A = Set_from([1, 2, 3])
         assert in_(4, A) is False
+
+
+class TestSymmetricDifference:
+    def test_symmetric_difference_disjoint(self):
+        A = Set_from([1, 2])
+        B = Set_from([3, 4])
+        result = symmetric_difference(A, B)
+        assert len(result._elems) == 4
+
+    def test_symmetric_difference_overlap(self):
+        A = Set_from([1, 2, 3])
+        B = Set_from([2, 3, 4])
+        result = symmetric_difference(A, B)
+        assert 1 in result
+        assert 4 in result
+        assert 2 not in result
+        assert len(result._elems) == 2
+
+    def test_symmetric_difference_same(self):
+        A = Set_from([1, 2, 3])
+        result = symmetric_difference(A, A)
+        assert len(result._elems) == 0
+
+
+class TestDisjointAndOverlapping:
+    def test_disjoint_true(self):
+        A = Set_from([1, 2])
+        B = Set_from([3, 4])
+        assert is_disjoint(A, B) is True
+
+    def test_disjoint_false(self):
+        A = Set_from([1, 2])
+        B = Set_from([2, 3])
+        assert is_disjoint(A, B) is False
+
+    def test_overlapping_true(self):
+        A = Set_from([1, 2])
+        B = Set_from([2, 3])
+        assert is_overlapping(A, B) is True
+
+    def test_overlapping_false(self):
+        A = Set_from([1, 2])
+        B = Set_from([3, 4])
+        assert is_overlapping(A, B) is False

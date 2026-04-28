@@ -63,10 +63,13 @@ def example_difference():
 
 
 def example_complement():
-    print("=== Complement (~) ===")
+    print("=== Complement ===")
+    U = Set_from([1, 2, 3, 4, 5])
     A = Set_from([1, 2, 3])
-    C = complement(A)
-    print(f"~A = {C}")
+    C = complement(A, U)
+    print(f"U = {U}")
+    print(f"A = {A}")
+    print(f"A complement (in U) = {C}")
     print()
 
 

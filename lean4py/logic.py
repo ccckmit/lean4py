@@ -1,6 +1,12 @@
 from typing import Optional
 
 class Prop:
+    """A propositional logic variable or compound formula.
+
+    Propositions are equal by name (Prop('p') == Prop('p') is True),
+    but are distinct objects (Prop('p') is Prop('p') is False).
+    Always use == for equality checks, not 'is'.
+    """
     def __init__(self, name: str):
         self.name = name
 
@@ -27,26 +33,35 @@ class Prop:
 
 
 def Prop_var(name: str) -> Prop:
+    """Create a propositional variable.
+
+    Shorthand for Prop(name). e.g., p = Prop_var('p')
+    """
     return Prop(name)
 
 
 def implies(a: Prop, b: Prop) -> Prop:
+    """Logical implication: a → b."""
     return _PropBinOp("→", a, b)
 
 
 def and_(a: Prop, b: Prop) -> Prop:
+    """Logical conjunction: a ∧ b."""
     return _PropBinOp("∧", a, b)
 
 
 def or_(a: Prop, b: Prop) -> Prop:
+    """Logical disjunction: a ∨ b."""
     return _PropBinOp("∨", a, b)
 
 
 def not_(a: Prop) -> Prop:
+    """Logical negation: ¬a."""
     return _PropUnOp("¬", a)
 
 
 def iff(a: Prop, b: Prop) -> Prop:
+    """Logical biconditional: a ↔ b (implemented as (a→b)∧(b→a))."""
     return and_(implies(a, b), implies(b, a))
 
 
@@ -66,6 +81,7 @@ class _PropUnOp(Prop):
 
 
 class Theorem:
+    """A named theorem with a proposition and optional proof steps."""
     def __init__(self, name: str, prop: Prop, proof: Optional[list] = None):
         self.name = name
         self.prop = prop
@@ -76,6 +92,7 @@ class Theorem:
 
 
 class ProofStep:
+    """A single step in a proof, identified by a tactic name and arguments."""
     def __init__(self, tactic: str, *args):
         self.tactic = tactic
         self.args = args
@@ -85,28 +102,35 @@ class ProofStep:
 
 
 def assume(name: str, prop: Prop) -> ProofStep:
+    """Assume a proposition with a given name in a proof."""
     return ProofStep("assume", name, prop)
 
 
 def have(name: str, prop: Prop, from_: Optional[str] = None) -> ProofStep:
+    """Introduce a new proposition that can be derived from existing assumptions."""
     return ProofStep("have", name, prop, from_)
 
 
 def exact(prop: Prop) -> ProofStep:
+    """Use an exact proposition to close a proof goal."""
     return ProofStep("exact", prop)
 
 
 def apply(h: str) -> ProofStep:
+    """Apply a hypothesis or theorem in a proof."""
     return ProofStep("apply", h)
 
 
 def rfl() -> ProofStep:
+    """Reflexivity tactic: prove a goal of the form x = x."""
     return ProofStep("rfl")
 
 
 def simp() -> ProofStep:
+    """Simplification tactic."""
     return ProofStep("simp")
 
 
 def prove(prop: Prop, tactics: list) -> Theorem:
+    """Create a theorem with a proposition and a list of proof tactics."""
     return Theorem(f"proved_{id(prop)}", prop, tactics)

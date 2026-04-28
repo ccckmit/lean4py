@@ -26,6 +26,9 @@ from lean4py.sets import (
     intersection,
     complement,
     difference,
+    symmetric_difference,
+    is_disjoint,
+    is_overlapping,
     cartesian,
     power_set,
     empty_set,
@@ -54,6 +57,12 @@ from lean4py.nat import (
     nat_le,
     nat_lt,
     nat_eq,
+    factorial,
+    fibonacci,
+    nat_gcd,
+    nat_is_prime,
+    nat_even,
+    nat_odd,
 )
 
 from lean4py.tactics import (
@@ -179,6 +188,8 @@ from lean4py.real_analysis import (
     Sequence,
     mclaurin_series,
     Function,
+    ratio_test,
+    root_test,
 )
 
 from lean4py.probability import (
@@ -194,6 +205,7 @@ from lean4py.probability import (
     BinomialDistribution,
     PoissonDistribution,
     UniformDistribution,
+    ExponentialDistribution,
     bayes_theorem,
     law_of_total_probability,
     hypothesis_test,
@@ -220,13 +232,15 @@ from lean4py.graph_theory import (
     spanning_tree,
     minimum_spanning_tree,
     is_complete,
+    graph_clique,
 )
 
-__version__ = "0.4.0"
+__version__ = "0.6.0"
 __all__ = [
     "Prop", "Prop_var", "implies", "and_", "or_", "not_", "iff",
     "Theorem", "ProofStep", "assume", "have", "exact", "apply", "rfl", "simp", "prove",
     "Set", "Set_from", "in_", "subset", "union", "intersection", "complement",
+    "symmetric_difference", "is_disjoint", "is_overlapping",
     "difference", "cartesian", "power_set", "empty_set",
     "Magma", "Semigroup", "Monoid", "Group", "AbelianGroup", "Ring", "Field",
     "Nat", "nat", "zero", "succ", "pred", "is_zero",
@@ -264,16 +278,18 @@ __all__ = [
     "rank", "nullity", "eigenvalues", "eigenvectors",
     "is_linearly_independent", "span",
     "is_orthogonal", "is_orthonormal",
-    "LinearMap", "linear_map",
+    "LinearMap", "linear_map", "characteristic_polynomial",
     "Real", "real", "limit", "derivative", "integral",
     "series_sum", "converges", "is_continuous", "is_differentiable",
     "taylor_series", "lhopital_limit", "Sequence", "Function",
     "ProbabilitySpace", "Event", "RandomVariable",
     "ExpectedValue", "Variance", "StandardDeviation",
     "NormalDistribution", "BinomialDistribution", "PoissonDistribution",
+    "UniformDistribution", "ExponentialDistribution",
     "bayes_theorem", "hypothesis_test", "confidence_interval",
     "Graph", "Vertex", "Edge",
     "bfs", "dfs", "shortest_path", "dijkstra",
     "is_connected", "is_bipartite", "has_cycle",
     "topological_sort", "spanning_tree", "minimum_spanning_tree",
+    "is_complete", "graph_clique",
 ]

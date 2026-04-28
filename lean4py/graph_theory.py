@@ -416,8 +416,31 @@ def minimum_spanning_tree(g: Graph) -> Optional[Graph]:
     return None
 
 def graph_clique(g: Graph) -> List[Any]:
+    """Find a maximum clique in the graph using Bron–Kerbosch algorithm.
+
+    Returns a list of vertices forming the largest complete subgraph.
+    """
     if not g.vertices:
         return []
+
+    all_vertices = list(g.vertices)
+
+    def bron_kerbosch(r: set, p: set, x: set) -> set:
+        if not p and not x:
+            return r
+        max_clique = set()
+        for v in list(p):
+            new_r = r | {v}
+            new_p = p & g.neighbors(v)
+            new_x = x & g.neighbors(v)
+            clique = bron_kerbosch(new_r, new_p, new_x)
+            if len(clique) > len(max_clique):
+                max_clique = clique
+            p = p - {v}
+            x = x | {v}
+        return max_clique
+
+    return list(bron_kerbosch(set(), set(all_vertices), set()))
 
 def is_complete(g: Graph) -> bool:
     n = len(g.vertices)

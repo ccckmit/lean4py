@@ -303,3 +303,39 @@ def sum_func(f: Function, g: Function) -> Function:
 
 def product_func(f: Function, g: Function) -> Function:
     return Function(lambda x: f.f(x) * g.f(x))
+
+
+def ratio_test(a_n: List[float]) -> str:
+    """Ratio test for series convergence.
+
+    Returns: "converges", "diverges", or "inconclusive"
+    """
+    if len(a_n) < 2:
+        return "inconclusive"
+    ratios = [abs(a_n[i+1] / a_n[i]) for i in range(len(a_n)-1) if a_n[i] != 0]
+    if not ratios:
+        return "inconclusive"
+    avg_ratio = sum(ratios) / len(ratios)
+    if avg_ratio < 1:
+        return "converges"
+    elif avg_ratio > 1:
+        return "diverges"
+    return "inconclusive"
+
+
+def root_test(a_n: List[float]) -> str:
+    """Root test for series convergence.
+
+    Returns: "converges", "diverges", or "inconclusive"
+    """
+    if not a_n:
+        return "inconclusive"
+    roots = [abs(x) ** (1/(i+1)) for i, x in enumerate(a_n) if x != 0]
+    if not roots:
+        return "inconclusive"
+    lim_sup = max(roots)
+    if lim_sup < 1:
+        return "converges"
+    elif lim_sup > 1:
+        return "diverges"
+    return "inconclusive"

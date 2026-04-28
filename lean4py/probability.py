@@ -232,10 +232,12 @@ class PoissonDistribution(Distribution):
         return self.lam
 
     def sample(self, n: int = 1) -> List[int]:
-        import numpy as np
         try:
+            import numpy as np
             return list(np.random.poisson(self.lam, n))
-        except:
+        except ImportError:
+            print("Warning: numpy not installed. Using fallback Gaussian approximation.")
+            print("Install with: pip install lean4py[probability]")
             return [max(0, int(random.gauss(self.lam, math.sqrt(self.lam)))) for _ in range(n)]
 
 class UniformDistribution(Distribution):
@@ -268,6 +270,35 @@ class UniformDistribution(Distribution):
     def sample(self, n: int = 1) -> List[float]:
         return [random.uniform(self.a, self.b) for _ in range(n)]
 
+
+class ExponentialDistribution(Distribution):
+    """Exponential distribution with rate parameter lam (λ)."""
+    def __init__(self, lam: float):
+        self.lam = lam
+
+    def __repr__(self):
+        return f"Exponential(λ={self.lam})"
+
+    def pdf(self, x: float) -> float:
+        if x < 0:
+            return 0.0
+        return self.lam * math.exp(-self.lam * x)
+
+    def cdf(self, x: float) -> float:
+        if x < 0:
+            return 0.0
+        return 1 - math.exp(-self.lam * x)
+
+    def mean(self) -> float:
+        return 1.0 / self.lam
+
+    def variance(self) -> float:
+        return 1.0 / (self.lam ** 2)
+
+    def sample(self, n: int = 1) -> List[float]:
+        return [random.expovariate(self.lam) for _ in range(n)]
+
+
 def bayes_theorem(p_a_given_b: float, p_b_given_a: float, p_a: float, p_b: float) -> float:
     return (p_b_given_a * p_a) / p_b if p_b > 0 else 0.0
 
@@ -287,13 +318,19 @@ def hypothesis_test(test_type: str, sample: List[float], mu: float = 0, sigma: f
         if sigma is not None:
             s = sigma
         t_stat = (sample_mean - mu) / (s / math.sqrt(n))
-        from scipy.stats import t as t_dist
+        try:
+            from scipy.stats import t as t_dist
+        except ImportError:
+            raise ImportError("scipy is required for t-test. Install with: pip install lean4py[probability]")
         p_value = 2 * (1 - t_dist.cdf(abs(t_stat), n - 1))
         return {'t': t_stat, 'p_value': p_value, 'reject': p_value < alpha}
     elif test_type == 'chi-square':
         expected = [mu] * n
         chi2_stat = sum((obs - exp) ** 2 / exp for obs, exp in zip(sample, expected))
-        from scipy.stats import chi2 as chi2_dist
+        try:
+            from scipy.stats import chi2 as chi2_dist
+        except ImportError:
+            raise ImportError("scipy is required for chi-square test. Install with: pip install lean4py[probability]")
         p_value = 1 - chi2_dist.cdf(chi2_stat, n - 1)
         return {'chi2': chi2_stat, 'p_value': p_value, 'reject': p_value < alpha}
     else:
@@ -303,7 +340,10 @@ def confidence_interval(sample: List[float], confidence: float = 0.95) -> Tuple[
     n = len(sample)
     mean = sum(sample) / n
     s = math.sqrt(sum((x - mean) ** 2 for x in sample) / (n - 1))
-    from scipy.stats import t as t_dist
+    try:
+        from scipy.stats import t as t_dist
+    except ImportError:
+        raise ImportError("scipy is required for confidence_interval. Install with: pip install lean4py[probability]")
     t_val = t_dist.ppf((1 + confidence) / 2, n - 1)
     margin = t_val * s / math.sqrt(n)
     return (mean - margin, mean + margin)
