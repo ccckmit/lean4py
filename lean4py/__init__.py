@@ -345,6 +345,27 @@ from lean4py.gaussian_process import (
     predict_gp,
 )
 
+from lean4py.hmm import (
+    HMM,
+)
+
+from lean4py.kalman_filter import (
+    KalmanFilter,
+    kalman_smooth,
+)
+
+from lean4py.sparse_coding import (
+    OMP,
+    sparse_coding,
+    compute_dictionary,
+)
+
+from lean4py.manifold_learning import (
+    isomap,
+    LLE,
+    compute_geodesic_distances,
+)
+
 from lean4py.optimization import (
     gradient_descent,
     linear_programming,
@@ -368,7 +389,7 @@ from lean4py.exceptions import (
     ProbabilityError,
 )
 
-__version__ = "1.8.0"
+__version__ = "1.9.0"
 __all__ = [
     "Prop", "Prop_var", "implies", "and_", "or_", "not_", "iff",
     "Theorem", "ProofStep", "assume", "have", "exact", "apply", "rfl", "simp", "prove",
