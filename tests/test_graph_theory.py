@@ -1,12 +1,14 @@
 import pytest
 from lean4py.graph_theory import (
     Graph, Vertex, Edge,
-    adjacency_list, adjacency_matrix,
     bfs, dfs, shortest_path, dijkstra, bellman_ford,
-    is_connected, is_bipartite, connected_components, has_cycle,
-    topological_sort, eulerian_path, spanning_tree, minimum_spanning_tree,
-    is_complete, graph_clique, complement_graph,
-    is_eulerian, graph_coloring,
+    is_connected, is_bipartite, connected_components,
+    has_cycle, topological_sort,
+    eulerian_path, spanning_tree, minimum_spanning_tree,
+    is_complete, graph_clique, is_eulerian,
+    graph_coloring, complement_graph,
+    adjacency_list, adjacency_matrix,
+    has_hamiltonian_path,
 )
 
 class TestGraphInit:
@@ -273,3 +275,26 @@ class TestComplementGraph:
         comp = complement_graph(g)
         # Check that edge 2-3 or 3-2 is in complement's adjacency
         assert 3 in comp.adjacency.get(1, set()) or 1 in comp.adjacency.get(3, set())
+class TestHamiltonianPath:
+    def test_complete_graph(self):
+        g = Graph(["A", "B", "C"])
+        for u, v in [("A","B"), ("B","C"), ("A","C")]:
+            g.add_edge(u, v)
+        assert has_hamiltonian_path(g) == True
+
+    def test_single_vertex(self):
+        g = Graph(["A"])
+        assert has_hamiltonian_path(g) == True
+
+    def test_two_vertices_no_edge(self):
+        g = Graph(["A", "B"])
+        # Dirac: deg < n/2 = 1, so False
+        assert has_hamiltonian_path(g) == False
+
+    def test_line_graph(self):
+        g = Graph([1, 2, 3, 4])
+        for i in range(3):
+            g.add_edge(i+1, i+2)
+        # Each vertex has degree 1 or 2, n=4, n/2=2
+        # Endpoints have degree 1 < 2, so False
+        assert has_hamiltonian_path(g) == False

@@ -517,3 +517,126 @@ def graph_coloring(g: Graph, strategy: str = 'greedy') -> Dict[Any, int]:
             color += 1
         colors[v] = color
     return colors
+
+
+def has_hamiltonian_path(g: Graph) -> bool:
+    """Check if graph has Hamiltonian path (Dirac's theorem heuristic).
+    
+    Uses Dirac's sufficient condition: if deg(v) >= n/2 for all v,
+    then Hamiltonian cycle exists (hence path exists).
+    Note: This is a sufficient but not necessary condition.
+    """
+    n = len(g.vertices)
+    if n < 2:
+        return True
+    # Dirac's condition for Hamiltonian cycle
+    for v in g.vertices:
+        if g.degree(v) < n / 2:
+            return False
+    return True
+
+
+from collections import deque
+
+def max_flow(g: Graph, source: Any, sink: Any) -> Tuple[float, Graph]:
+    """Ford-Fulkerson algorithm for max flow.
+    
+    Args:
+        g: Directed graph with edge weights as capacities
+        source: Source vertex
+        sink: Sink vertex
+        
+    Returns:
+        (max_flow_value, residual_graph)
+    """
+    # Initialize residual graph with capacities from original graph
+    residual = Graph(g.vertices, directed=True)
+    for u in g.vertices:
+        for v in g.adjacency.get(u, set()):
+            cap = g.weights.get((u, v), 1.0)
+            residual.weights[(u, v)] = cap
+            residual.adjacency[u].add(v)
+            # Add reverse edge with 0 capacity if not exists
+            if v not in residual.adjacency:
+                residual.adjacency[v] = set()
+            if (v, u) not in residual.weights:
+                residual.weights[(v, u)] = 0.0
+    
+    total_flow = 0.0
+    
+    while True:
+        # BFS to find augmenting path
+        parent = {}
+        queue = deque([source])
+        parent[source] = None
+        
+        while queue:
+            u = queue.popleft()
+            if u == sink:
+                break
+            for v in residual.adjacency.get(u, set()):
+                cap = residual.weights.get((u, v), 0.0)
+                if cap > 0 and v not in parent:
+                    parent[v] = u
+                    queue.append(v)
+        
+        if sink not in parent:
+            break
+        
+        # Find min capacity along path
+        path_flow = float('inf')
+        v = sink
+        while v != source:
+            u = parent[v]
+            cap = residual.weights.get((u, v), 0.0)
+            path_flow = min(path_flow, cap)
+            v = u
+        
+        # Update residual capacities
+        v = sink
+        while v != source:
+            u = parent[v]
+            residual.weights[(u, v)] -= path_flow
+            # Add reverse flow
+            if (v, u) not in residual.weights:
+                residual.adjacency[v].add(u)
+                residual.weights[(v, u)] = 0.0
+            residual.weights[(v, u)] += path_flow
+            v = u
+        
+        total_flow += path_flow
+    
+    return total_flow, residual
+
+
+def min_cut(g: Graph, source: Any, sink: Any) -> Tuple[float, set, set]:
+    """Min cut using max flow result (min-cut theorem).
+
+    Args:
+        g: Directed graph with edge weights as capacities
+        source: Source vertex
+        sink: Sink vertex
+
+    Returns:
+        (cut_capacity, S, T) where S contains source, T = V \\ S
+    """
+    flow_value, residual = max_flow(g, source, sink)
+    
+    # Find vertices reachable from source in residual graph
+    visited = set()
+    queue = deque([source])
+    
+    while queue:
+        u = queue.popleft()
+        if u in visited:
+            continue
+        visited.add(u)
+        for v in residual.adjacency.get(u, set()):
+            cap = residual.weights.get((u, v), 0.0)
+            if cap > 0 and v not in visited:
+                queue.append(v)
+    
+    S = visited
+    T = set(g.vertices) - S
+    
+    return flow_value, S, T

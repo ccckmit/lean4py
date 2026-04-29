@@ -236,6 +236,7 @@ from lean4py.graph_theory import (
     is_eulerian,
     graph_coloring,
     complement_graph,
+    has_hamiltonian_path,
 )
 
 from lean4py.statistics import (
@@ -244,9 +245,38 @@ from lean4py.statistics import (
     covariance, correlation,
     linear_regression,
     skewness, kurtosis,
+    t_test_one_sample,
+    confidence_interval_mean,
 )
 
-__version__ = "0.8.0"
+from lean4py.symbolic import (
+    symbolic_derivative,
+    symbolic_integral,
+    symbolic_simplify,
+)
+
+from lean4py.information_theory import (
+    entropy,
+    mutual_information,
+    kl_divergence,
+)
+
+from lean4py.optimization import (
+    gradient_descent,
+    linear_programming,
+    newton_method,
+)
+
+from lean4py.exceptions import (
+    Lean4PyError,
+    DimensionError,
+    NotInvertibleError,
+    ConvergenceError,
+    GraphError,
+    ProbabilityError,
+)
+
+__version__ = "1.1.0"
 __all__ = [
     "Prop", "Prop_var", "implies", "and_", "or_", "not_", "iff",
     "Theorem", "ProofStep", "assume", "have", "exact", "apply", "rfl", "simp", "prove",
@@ -306,6 +336,7 @@ __all__ = [
     "spanning_tree", "minimum_spanning_tree",
     "is_complete", "graph_clique",
     "is_eulerian", "graph_coloring",
+    "has_hamiltonian_path",
     "complement_graph",
     "mean", "median", "mode",
     "variance", "std_dev",
