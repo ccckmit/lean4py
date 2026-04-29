@@ -341,3 +341,34 @@ def root_test(a_n: List[float]) -> str:
     elif lim_sup > 1:
         return "diverges"
     return "inconclusive"
+
+
+def adaptive_simpson(f: Callable[[float], float], a: float, b: float, 
+                     tol: float = 1e-6, max_depth: int = 20) -> float:
+    """Adaptive Simpson's rule for numerical integration.
+    
+    Args:
+        f: Function to integrate
+        a, b: Integration bounds
+        tol: Error tolerance
+        max_depth: Maximum recursion depth
+        
+    Returns:
+        Integral approximation
+    """
+    def _simpson(f, a, b):
+        c = (a + b) / 2
+        h = (b - a) / 6
+        return h * (f(a) + 4*f(c) + f(b))
+    
+    def _recursive(f, a, b, S, tol, depth):
+        c = (a + b) / 2
+        S_left = _simpson(f, a, c)
+        S_right = _simpson(f, c, b)
+        if depth <= 0 or abs(S_left + S_right - S) < 15 * tol:
+            return S_left + S_right + (S_left + S_right - S) / 15
+        return (_recursive(f, a, c, S_left, tol/2, depth-1) +
+                _recursive(f, c, b, S_right, tol/2, depth-1))
+    
+    S0 = _simpson(f, a, b)
+    return _recursive(f, a, b, S0, tol, max_depth)

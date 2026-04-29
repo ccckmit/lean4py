@@ -101,13 +101,20 @@ def conjugate_gradient(
     # Initial residual r = b - Ax
     Ax = A(x)
     r = [b[i] - Ax[i] for i in range(n)]
-    p = r[:]  # Initial search direction
-    
     r_dot_r = sum(r[i] * r[i] for i in range(n))
+    
+    # If b = 0, solution is x = 0
+    if r_dot_r < tol:
+        return x
+    
+    p = r[:]  # Initial search direction
     
     for _ in range(min(max_iter, n)):
         Ap = A(p)
-        alpha = r_dot_r / sum(p[i] * Ap[i] for i in range(n))
+        pAp = sum(p[i] * Ap[i] for i in range(n))
+        if pAp < 1e-15:
+            return x
+        alpha = r_dot_r / pAp
         
         x = [x[i] + alpha * p[i] for i in range(n)]
         r_new = [r[i] - alpha * Ap[i] for i in range(n)]
@@ -120,6 +127,8 @@ def conjugate_gradient(
         p = [r_new[i] + beta * p[i] for i in range(n)]
         r = r_new
         r_dot_r = r_new_dot
+    
+    return x
     
     return x
 

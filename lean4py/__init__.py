@@ -190,6 +190,7 @@ from lean4py.real_analysis import (
     Function,
     ratio_test,
     root_test,
+    adaptive_simpson,
 )
 
 from lean4py.probability import (
@@ -247,6 +248,8 @@ from lean4py.statistics import (
     skewness, kurtosis,
     t_test_one_sample,
     confidence_interval_mean,
+    anova_one_way,
+    chi_square_test,
 )
 
 from lean4py.symbolic import (
@@ -265,6 +268,7 @@ from lean4py.optimization import (
     gradient_descent,
     linear_programming,
     newton_method,
+    conjugate_gradient,
 )
 
 from lean4py.exceptions import (
@@ -276,7 +280,7 @@ from lean4py.exceptions import (
     ProbabilityError,
 )
 
-__version__ = "1.1.0"
+__version__ = "1.2.0"
 __all__ = [
     "Prop", "Prop_var", "implies", "and_", "or_", "not_", "iff",
     "Theorem", "ProofStep", "assume", "have", "exact", "apply", "rfl", "simp", "prove",
