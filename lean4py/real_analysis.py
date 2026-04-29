@@ -326,12 +326,76 @@ def ratio_test(a_n: List[float]) -> str:
 
 
 def root_test(a_n: List[float]) -> str:
-    """Root test for series convergence.
-
-    Returns: "converges", "diverges", or "inconclusive"
-    """
+    """Root test for series convergence."""
     if not a_n:
         return "inconclusive"
+    roots = [abs(x) ** (1/(i+1)) for i, x in enumerate(a_n) if x != 0]
+    if not roots:
+        return "inconclusive"
+    lim_sup = max(roots)
+    if lim_sup < 1:
+        return "converges"
+    elif lim_sup > 1:
+        return "diverges"
+    return "inconclusive"
+
+
+def euler_method(
+    f: Callable[[float, List[float]], List[float]],
+    y0: List[float],
+    t_span: Tuple[float, float],
+    dt: float = 0.01
+) -> Tuple[List[float], List[List[float]]]:
+    """Euler's method for systems of ODEs.
+    
+    Solves dy/dt = f(t, y), y(t0) = y0.
+    
+    Args:
+        f: Function returning derivatives (dy/dt)
+        y0: Initial conditions
+        t_span: (t_start, t_end)
+        dt: Time step
+        
+    Returns:
+        (t_values, y_values)
+    """
+    t0, tf = t_span
+    n_steps = int((tf - t0) / dt)
+    t_vals = [t0 + i * dt for i in range(n_steps + 1)]
+    y_vals = [y0[:]]
+    
+    y = y0[:]
+    for i in range(n_steps):
+        dydt = f(t_vals[i], y)
+        y = [y[j] + dt * dydt[j] for j in range(len(y))]
+        y_vals.append(y[:])
+    
+    return t_vals, y_vals
+
+
+def runge_kutta_4(
+    f: Callable[[float, List[float]], List[float]],
+    y0: List[float],
+    t_span: Tuple[float, float],
+    dt: float = 0.01
+) -> Tuple[List[float], List[List[float]]]:
+    """Fourth-order Runge-Kutta method."""
+    t0, tf = t_span
+    n_steps = int((tf - t0) / dt)
+    t_vals = [t0 + i * dt for i in range(n_steps + 1)]
+    y_vals = [y0[:]]
+    
+    y = y0[:]
+    for i in range(n_steps):
+        t = t_vals[i]
+        k1 = f(t, y)
+        k2 = f(t + dt/2, [y[j] + dt/2 * k1[j] for j in range(len(y))])
+        k3 = f(t + dt/2, [y[j] + dt/2 * k2[j] for j in range(len(y))])
+        k4 = f(t + dt, [y[j] + dt * k3[j] for j in range(len(y))])
+        y = [y[j] + dt/6 * (k1[j] + 2*k2[j] + 2*k3[j] + k4[j]) for j in range(len(y))]
+        y_vals.append(y[:])
+    
+    return t_vals, y_vals
     roots = [abs(x) ** (1/(i+1)) for i, x in enumerate(a_n) if x != 0]
     if not roots:
         return "inconclusive"

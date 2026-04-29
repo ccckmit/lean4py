@@ -133,6 +133,118 @@ def conjugate_gradient(
     return x
 
 
+def lagrange_multiplier(
+    f: Callable[[List[float]], float],
+    constraints: List[Tuple[Callable[[List[float]], float], float]],
+    x0: List[float]
+) -> Tuple[List[float], float, List[float]]:
+    """Lagrange multiplier method for equality-constrained optimization.
+    
+    Minimize f(x) subject to g_i(x) = target_i for all i.
+    
+    Args:
+        f: Objective function
+        constraints: List of (g_i, target_i) pairs
+        x0: Initial guess
+        
+    Returns:
+        (x_opt, f_opt, lambda_opt)
+    """
+    # Simple implementation using gradient descent on augmented Lagrangian
+    import random
+    x = x0[:]
+    n = len(x0)
+    m = len(constraints)
+    lam = [0.0] * m
+    lr = 0.01
+    rho = 0.1  # Penalty parameter
+    
+    for _ in range(1000):
+        # Compute constraint violations
+        violations = []
+        for g, target in constraints:
+            violations.append(g(x) - target)
+        
+        # Check convergence
+        if all(abs(v) < 1e-6 for v in violations):
+            break
+        
+        # Gradient descent step on augmented Lagrangian
+        # L = f(x) + Σ λ_i * (g_i(x) - target_i) + (rho/2) * Σ (g_i(x) - target_i)^2
+        # Simplified: numerical gradient
+        h = 1e-5
+        grad_f = [(f([x[j] + (h if j==i else x[j]) for j in range(n)]) - f(x)) / h
+                  for i in range(n)]
+        
+        grad_L = grad_f[:]
+        for i, (g, target) in enumerate(constraints):
+            # ∂L/∂x = ∇f + Σ λ_i * ∇g_i + rho * (g_i - target) * ∇g_i
+            grad_g = [(g([x[j] + (h if j==k else x[j]) for j in range(n)]) - g(x)) / h
+                      for k in range(n)]
+            for j in range(n):
+                grad_L[j] += lam[i] * grad_g[j] + rho * violations[i] * grad_g[j]
+        
+        x = [x[j] - lr * grad_L[j] for j in range(n)]
+        
+        # Update Lagrange multipliers
+        for i, (g, target) in enumerate(constraints):
+            lam[i] += rho * violations[i]
+    
+    return x, f(x), lam
+
+
+def penalty_method(
+    f: Callable[[List[float]], float],
+    inequalities: List[Tuple[Callable[[List[float]], float], float]],
+    x0: List[float],
+    mu: float = 10.0,
+    max_iter: int = 100
+) -> Tuple[List[float], float]:
+    """Penalty method for inequality-constrained optimization.
+    
+    Minimize f(x) subject to g_i(x) <= 0 for all i.
+    
+    Args:
+        f: Objective function
+        inequalities: List of (g_i, _) pairs (g_i(x) <= 0)
+        x0: Initial guess
+        mu: Penalty parameter
+        max_iter: Maximum iterations
+        
+    Returns:
+        (x_opt, f_opt)
+    """
+    x = x0[:]
+    n = len(x0)
+    
+    for iter in range(max_iter):
+        # Augmented objective: f(x) + (mu/2) * Σ max(0, g_i(x))^2
+        def augmented(x_val):
+            total = f(x_val)
+            for g, _ in inequalities:
+                violation = max(0, g(x_val))
+                total += (mu / 2) * violation ** 2
+            return total
+        
+        # Check convergence
+        max_violation = max(max(0, g(x)) for g, _ in inequalities)
+        if max_violation < 1e-6:
+            break
+        
+        # Gradient descent on augmented function
+        h = 1e-5
+        grad = [(augmented([x[j] + (h if j==i else x[j]) for j in range(n)]) - 
+                  augmented(x)) / h
+                  for i in range(n)]
+        
+        learning_rate = 0.01
+        x = [x[j] - learning_rate * grad[j] for j in range(n)]
+        
+        mu *= 2  # Increase penalty
+    
+    return x, f(x)
+
+
 def linear_programming(
     c: List[float],
     A: List[List[float]],

@@ -191,6 +191,8 @@ from lean4py.real_analysis import (
     ratio_test,
     root_test,
     adaptive_simpson,
+    euler_method,
+    runge_kutta_4,
 )
 
 from lean4py.probability import (
@@ -250,12 +252,26 @@ from lean4py.statistics import (
     confidence_interval_mean,
     anova_one_way,
     chi_square_test,
+    mann_whitney_u,
+    kruskal_wallis,
 )
 
 from lean4py.symbolic import (
     symbolic_derivative,
     symbolic_integral,
     symbolic_simplify,
+)
+
+from lean4py.pde import (
+    solve_heat_equation,
+    solve_wave_equation,
+)
+
+from lean4py.time_series import (
+    moving_average,
+    autocovariance,
+    acf,
+    partial_acf,
 )
 
 from lean4py.information_theory import (
@@ -269,6 +285,8 @@ from lean4py.optimization import (
     linear_programming,
     newton_method,
     conjugate_gradient,
+    lagrange_multiplier,
+    penalty_method,
 )
 
 from lean4py.exceptions import (
@@ -280,7 +298,7 @@ from lean4py.exceptions import (
     ProbabilityError,
 )
 
-__version__ = "1.2.0"
+__version__ = "1.4.0"
 __all__ = [
     "Prop", "Prop_var", "implies", "and_", "or_", "not_", "iff",
     "Theorem", "ProofStep", "assume", "have", "exact", "apply", "rfl", "simp", "prove",
@@ -324,6 +342,8 @@ __all__ = [
     "is_linearly_independent", "span",
     "is_orthogonal", "is_orthonormal",
     "LinearMap", "linear_map", "characteristic_polynomial",
+    "solve_heat_equation", "solve_wave_equation",
+    "moving_average", "autocovariance", "acf", "partial_acf",
     "Real", "real", "limit", "derivative", "integral",
     "series_sum", "converges", "is_continuous", "is_differentiable",
     "taylor_series", "lhopital_limit", "Sequence", "Function",

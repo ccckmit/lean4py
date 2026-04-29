@@ -123,3 +123,81 @@ def chi_square_test(observed, expected=None):
     z=(chi2-df)/(2*df)**0.5
     p=2*(1-0.5*(1+math.erf(abs(z)/(2**0.5))))
     return (chi2,p)
+
+
+def mann_whitney_u(x, y):
+    """Mann-Whitney U test."""
+    n1, n2 = len(x), len(y)
+    if n1==0 or n2==0: return (0.0,1.0)
+    # Combine and rank
+    combined = sorted([(val,0) for val in x] + [(val,1) for val in y])
+    # Assign ranks
+    ranks = [0.0] * (n1+n2)
+    i = 0
+    while i < len(combined):
+        j = i
+        while j < len(combined) and combined[j][0] == combined[i][0]:
+            j += 1
+        avg_rank = (i + j + 1) / 2
+        for k in range(i, j):
+            ranks[k] = avg_rank
+        i = j
+    # Sum of ranks for group x
+    R1 = sum(ranks[i] for i in range(n1))
+    U1 = R1 - n1*(n1+1)/2
+    U2 = n1*n2 - U1
+    U = min(U1, U2)
+    # Normal approximation
+    import math
+    mu_U = n1*n2/2
+    sigma_U = (n1*n2*(n1+n2+1)/12)**0.5
+    if sigma_U == 0: return (U,1.0)
+    z = (U - mu_U) / sigma_U
+    p = 2*(1-0.5*(1+math.erf(abs(z)/(2**0.5))))
+    return (U, p)
+
+
+def kruskal_wallis(groups):
+    """Kruskal-Wallis H test."""
+    k = len(groups)
+    if k < 2:
+        return (0.0, 1.0)
+    # Combine all observations
+    all_vals = []
+    group_idx = []
+    for i, g in enumerate(groups):
+        all_vals.extend(g)
+        group_idx.extend([i] * len(g))
+    n_total = len(all_vals)
+    if n_total == 0:
+        return (0.0, 1.0)
+    # Rank all observations
+    indexed = sorted(zip(all_vals, group_idx))
+    ranks = [0.0] * n_total
+    i = 0
+    while i < len(indexed):
+        j = i
+        while j < len(indexed) and indexed[j][0] == indexed[i][0]:
+            j += 1
+        avg_rank = (i + j + 1) / 2
+        for k_idx in range(i, j):
+            ranks[k_idx] = avg_rank
+        i = j
+    # Sum of ranks per group
+    R_i = [0.0] * k
+    n_i = [0] * k
+    for idx in range(n_total):
+        g = indexed[idx][1]
+        R_i[g] += ranks[idx]
+        n_i[g] += 1
+    # H statistic
+    H = 12 / (n_total * (n_total + 1)) * sum(R_i[g]**2 / n_i[g] for g in range(k) if n_i[g] > 0) - 3 * (n_total + 1)
+    # Chi-square approximation
+    import math
+    df = k - 1
+    if df <= 0:
+        return (H, 1.0)
+    # Approximate p-value
+    z = (H - df) / (2 * df) ** 0.5
+    p = 2 * (1 - 0.5 * (1 + math.erf(abs(z) / (2 ** 0.5))))
+    return (H, p)
