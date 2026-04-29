@@ -254,6 +254,7 @@ from lean4py.statistics import (
     chi_square_test,
     mann_whitney_u,
     kruskal_wallis,
+    linear_regression_diagnostics,
 )
 
 from lean4py.symbolic import (
@@ -265,6 +266,8 @@ from lean4py.symbolic import (
 from lean4py.pde import (
     solve_heat_equation,
     solve_wave_equation,
+    solve_laplace_equation,
+    solve_poisson_equation,
 )
 
 from lean4py.time_series import (
@@ -274,10 +277,56 @@ from lean4py.time_series import (
     partial_acf,
 )
 
+from lean4py.ml_basics import (
+    linear_regression_ml,
+    logistic_regression,
+    svm_linear,
+    decision_tree,
+    predict_tree,
+    kmeans,
+    random_forest,
+    predict_random_forest,
+)
+
 from lean4py.information_theory import (
     entropy,
     mutual_information,
     kl_divergence,
+)
+
+from lean4py.neural_network import (
+    DenseLayer,
+    NeuralNetwork,
+    sigmoid,
+    relu,
+    tanh,
+    mse_loss,
+    train_neural_network,
+)
+
+from lean4py.bayesian import (
+    GaussianPrior,
+    BetaPrior,
+    posterior_update_normal,
+    posterior_update_beta_binomial,
+    metropolis_hastings,
+    bayesian_linear_regression,
+    compute_bayes_factor,
+)
+
+from lean4py.signal_processing import (
+    dft,
+    idft,
+    fft,
+    ifft,
+    spectrogram,
+    compute_frequency_spectrum,
+)
+
+from lean4py.linear_algebra import (
+    compute_mean_vector,
+    compute_covariance_matrix,
+    pca,
 )
 
 from lean4py.optimization import (
@@ -287,6 +336,9 @@ from lean4py.optimization import (
     conjugate_gradient,
     lagrange_multiplier,
     penalty_method,
+    augmented_lagrange,
+    bfgs,
+    lbfgs,
 )
 
 from lean4py.exceptions import (
@@ -298,7 +350,7 @@ from lean4py.exceptions import (
     ProbabilityError,
 )
 
-__version__ = "1.4.0"
+__version__ = "1.7.0"
 __all__ = [
     "Prop", "Prop_var", "implies", "and_", "or_", "not_", "iff",
     "Theorem", "ProofStep", "assume", "have", "exact", "apply", "rfl", "simp", "prove",
@@ -342,8 +394,11 @@ __all__ = [
     "is_linearly_independent", "span",
     "is_orthogonal", "is_orthonormal",
     "LinearMap", "linear_map", "characteristic_polynomial",
+    "linear_regression_diagnostics",
     "solve_heat_equation", "solve_wave_equation",
+    "solve_laplace_equation", "solve_poisson_equation",
     "moving_average", "autocovariance", "acf", "partial_acf",
+    "linear_regression_ml", "logistic_regression",
     "Real", "real", "limit", "derivative", "integral",
     "series_sum", "converges", "is_continuous", "is_differentiable",
     "taylor_series", "lhopital_limit", "Sequence", "Function",

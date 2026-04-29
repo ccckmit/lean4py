@@ -412,3 +412,135 @@ def characteristic_polynomial(M: Matrix) -> List[float]:
         return list(coeffs)
     except ImportError:
         return []
+
+
+def compute_mean_vector(data: List[List[float]]) -> List[float]:
+    """Compute mean vector of data.
+    
+    Args:
+        data: List of data points (each point is a list of features)
+        
+    Returns:
+        Mean vector
+    """
+    if not data:
+        return []
+    n = len(data)
+    dim = len(data[0])
+    return [sum(data[i][d] for i in range(n)) / n for d in range(dim)]
+
+
+def compute_covariance_matrix(data: List[List[float]]) -> List[List[float]]:
+    """Compute covariance matrix of data.
+    
+    Args:
+        data: List of data points (each point is a list of features)
+        
+    Returns:
+        Covariance matrix (dim x dim)
+    """
+    if not data:
+        return []
+    
+    n = len(data)
+    dim = len(data[0])
+    mean = compute_mean_vector(data)
+    
+    # Initialize covariance matrix
+    cov = [[0.0] * dim for _ in range(dim)]
+    
+    # Compute covariance
+    for i in range(dim):
+        for j in range(dim):
+            cov[i][j] = sum((data[k][i] - mean[i]) * (data[k][j] - mean[j]) 
+                             for k in range(n)) / (n - 1) if n > 1 else 0.0
+    
+    return cov
+
+
+def _compute_eigenvectors_cov(cov: List[List[float]], n_components: int) -> List[List[float]]:
+    """Compute top eigenvectors of covariance matrix.
+    
+    Uses power iteration method for simplicity.
+    """
+    dim = len(cov)
+    
+    # Try numpy first
+    try:
+        import numpy as np
+        np_cov = np.array(cov)
+        eigvals, eigvecs = np.linalg.eigh(np_cov)
+        # Sort by eigenvalue descending
+        idx = np.argsort(eigvals)[::-1]
+        return [list(eigvecs[:, i]) for i in idx[:n_components]]
+    except ImportError:
+        pass
+    
+    # Power iteration (simple fallback)
+    eigenvectors = []
+    for _ in range(n_components):
+        # Random initialization
+        import random
+        v = [random.gauss(0, 1) for _ in range(dim)]
+        norm = math.sqrt(sum(x**2 for x in v))
+        v = [x / norm for x in v]
+        
+        # Power iteration
+        for _ in range(100):
+            # Matrix-vector multiplication: cov @ v
+            new_v = [sum(cov[i][j] * v[j] for j in range(dim)) for i in range(dim)]
+            norm = math.sqrt(sum(x**2 for x in new_v))
+            v = [x / norm for x in new_v]
+        
+        eigenvectors.append(v)
+    return eigenvectors
+
+
+def pca(
+    data: List[List[float]],
+    n_components: int = 2
+) -> Tuple[List[List[float]], List[float], List[List[float]]]:
+    """Principal Component Analysis.
+    
+    Args:
+        data: List of data points (each point is a list of features)
+        n_components: Number of principal components to return
+        
+    Returns:
+        (transformed_data, explained_variance, principal_components)
+        - transformed_data: Data projected onto principal components
+        - explained_variance: Variance explained by each PC
+        - principal_components: The principal component vectors
+    """
+    if not data or n_components <= 0:
+        return [], [], []
+    
+    dim = len(data[0])
+    n_components = min(n_components, dim)
+    
+    # Center the data
+    mean = compute_mean_vector(data)
+    centered = [[data[i][d] - mean[d] for d in range(dim)] for i in range(len(data))]
+    
+    # Compute covariance matrix
+    cov = compute_covariance_matrix(centered)
+    
+    # Get eigenvectors (principal components)
+    components = _compute_eigenvectors_cov(cov, n_components)
+    
+    # Compute explained variance (eigenvalues approximated)
+    explained_variance = []
+    for comp in components:
+        # Rayleigh quotient: v^T @ cov @ v
+        var = sum(comp[i] * sum(cov[i][j] * comp[j] for j in range(dim)) 
+                  for i in range(dim))
+        explained_variance.append(var)
+    
+    # Project data onto components
+    transformed = []
+    for point in centered:
+        projected = [sum(point[d] * comp[d] for d in range(dim)) 
+                     for comp in components]
+        transformed.append(projected)
+    
+    return transformed, explained_variance, components

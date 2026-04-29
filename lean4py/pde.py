@@ -79,3 +79,64 @@ def solve_wave_equation(
         u_curr = u_next
     
     return x, u_curr
+
+def solve_laplace_equation(
+    Lx: float, Ly: float,
+    nx: int = 50, ny: int = 50,
+    max_iter: int = 1000, tol: float = 1e-6
+) -> List[List[float]]:
+    """Solve Laplace equation ∇²u = 0 with u=0 on boundary."""
+    dx = Lx / (nx - 1)
+    dy = Ly / (ny - 1)
+    
+    u = [[0.0 for _ in range(ny)] for _ in range(nx)]
+    
+    for _ in range(max_iter):
+        u_new = [row[:] for row in u]
+        max_diff = 0.0
+        
+        for i in range(1, nx-1):
+            for j in range(1, ny-1):
+                u_new[i][j] = 0.25 * (u[i+1][j] + u[i-1][j] + 
+                                u[i][j+1] + u[i][j-1])
+                max_diff = max(max_diff, abs(u_new[i][j] - u[i][j]))
+        
+        u = u_new
+        if max_diff < tol:
+            break
+    
+    return u
+
+
+def solve_poisson_equation(
+    Lx: float, Ly: float,
+    source: Callable[[float, float], float],
+    nx: int = 50, ny: int = 50,
+    max_iter: int = 1000, tol: float = 1e-6
+) -> List[List[float]]:
+    """Solve Poisson equation ∇²u = f with u=0 on boundary."""
+    dx = Lx / (nx - 1)
+    dy = Ly / (ny - 1)
+    dx2, dy2 = dx**2, dy**2
+    
+    u = [[0.0 for _ in range(ny)] for _ in range(nx)]
+    
+    for _ in range(max_iter):
+        u_new = [row[:] for row in u]
+        max_diff = 0.0
+        
+        for i in range(1, nx-1):
+            for j in range(1, ny-1):
+                x_val = i * dx
+                y_val = j * dy
+                f_val = source(x_val, y_val)
+                u_new[i][j] = (dy2 * (u[i+1][j] + u[i-1][j]) +
+                                dx2 * (u[i][j+1] + u[i][j-1]) -
+                                dx2 * dy2 * f_val) / (2 * (dx2 + dy2))
+                max_diff = max(max_diff, abs(u_new[i][j] - u[i][j]))
+        
+        u = u_new
+        if max_diff < tol:
+            break
+    
+    return u

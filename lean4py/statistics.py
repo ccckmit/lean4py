@@ -201,3 +201,39 @@ def kruskal_wallis(groups):
     z = (H - df) / (2 * df) ** 0.5
     p = 2 * (1 - 0.5 * (1 + math.erf(abs(z) / (2 ** 0.5))))
     return (H, p)
+
+
+def linear_regression_diagnostics(x: List[float], y: List[float]) -> dict:
+    """Linear regression with diagnostics."""
+    n = len(x)
+    if n != len(y) or n < 2:
+        return {}
+    
+    x_mean, y_mean = mean(x), mean(y)
+    
+    # Compute slope and intercept
+    sxx = sum((xi - x_mean)**2 for xi in x)
+    sxy = sum((x[i] - x_mean) * (y[i] - y_mean) for i in range(n))
+    
+    if sxx == 0:
+        return {}
+    
+    slope = sxy / sxx
+    intercept = y_mean - slope * x_mean
+    
+    # Compute fitted values and residuals
+    fitted = [intercept + slope * xi for xi in x]
+    residuals = [y[i] - fitted[i] for i in range(n)]
+    
+    # R-squared
+    ss_res = sum(r**2 for r in residuals)
+    ss_tot = sum((yi - y_mean)**2 for yi in y)
+    r_squared = 1 - (ss_res / ss_tot) if ss_tot > 0 else 0.0
+    
+    return {
+        'slope': slope,
+        'intercept': intercept,
+        'r_squared': r_squared,
+        'residuals': residuals,
+        'fitted_values': fitted
+    }

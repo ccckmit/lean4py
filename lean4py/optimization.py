@@ -245,6 +245,112 @@ def penalty_method(
     return x, f(x)
 
 
+def augmented_lagrange(
+    f: Callable[[List[float]], float],
+    eq_constraints: List[Tuple[Callable[[List[float]], float], float]],
+    ineq_constraints: List[Tuple[Callable[[List[float]], float], float]],
+    x0: List[float],
+    max_iter: int = 100,
+    tol: float = 1e-6
+) -> Tuple[List[float], float, List[float], List[float]]:
+    """Augmented Lagrange method.
+    
+    Minimize f(x) subject to:
+        g_i(x) = eq_target_i  (equality)
+        h_j(x) <= ineq_target_j  (inequality)
+    
+    Returns:
+        (x_opt, f_opt, lambda_opt, mu_opt)
+    """
+    import math
+    
+    x = [float(v) for v in x0]
+    n = len(x0)
+    m_eq = len(eq_constraints)
+    m_ineq = len(ineq_constraints)
+    
+    lam = [0.0] * m_eq
+    mu = [0.0] * m_ineq
+    rho = 1.0
+    
+    for iteration in range(max_iter):
+        # Define augmented Lagrangian with stable computation
+        def L_aug(x_val):
+            total = f(x_val)
+            # Equality constraints
+            for i, (g, target) in enumerate(eq_constraints):
+                violation = g(x_val) - target
+                # Use log-barrier style for stability: avoid squaring large values
+                if abs(violation) > 1e3:
+                    total += lam[i] * violation + rho * 1e3 * abs(violation)
+                else:
+                    total += lam[i] * violation + (rho/2) * violation**2
+            # Inequality constraints
+            for j, (h, target) in enumerate(ineq_constraints):
+                violation = h(x_val) - target
+                if violation > 0:  # Active inequality
+                    if violation > 1e3:
+                        total += mu[j] * violation + rho * 1e3 * violation
+                    else:
+                        total += mu[j] * violation + (rho/2) * violation**2
+            return total
+        
+        # Gradient descent with adaptive learning rate
+        learning_rate = 0.1
+        for _ in range(10):  # Inner loop for minimization
+            # Compute gradient using finite differences
+            grad = []
+            f0 = L_aug(x)
+            for i in range(n):
+                x_pert = x[:]
+                x_pert[i] += 1e-6
+                f1 = L_aug(x_pert)
+                grad.append((f1 - f0) / 1e-6)
+            
+            # Check for invalid gradients
+            if any(math.isnan(g) or math.isinf(g) for g in grad):
+                break
+            
+            # Update x
+            x_new = [x[i] - learning_rate * grad[i] for i in range(n)]
+            
+            # Check if improvement
+            if L_aug(x_new) < f0:
+                x = x_new
+                learning_rate = min(learning_rate * 1.1, 1.0)
+            else:
+                learning_rate *= 0.5
+            
+            if learning_rate < 1e-10:
+                break
+        
+        # Update multipliers
+        for i, (g, target) in enumerate(eq_constraints):
+            violation = g(x) - target
+            lam[i] += rho * violation
+            # Bound lambda
+            lam[i] = max(-1e6, min(1e6, lam[i]))
+        
+        for j, (h, target) in enumerate(ineq_constraints):
+            violation = max(0, h(x) - target)
+            mu[j] = max(0, mu[j] + rho * violation)
+            # Bound mu
+            mu[j] = min(mu[j], 1e6)
+        
+        # Check convergence
+        eq_violations = [abs(g(x) - target) for g, target in eq_constraints]
+        ineq_violations = [max(0, h(x) - target) for h, target in ineq_constraints]
+        max_viol = max(eq_violations + ineq_violations, default=0)
+        
+        if max_viol < tol:
+            break
+        
+        # Increase penalty
+        rho = min(rho * 2.0, 1e4)
+    
+    return x, f(x), lam, mu
+
+
 def linear_programming(
     c: List[float],
     A: List[List[float]],
@@ -273,3 +379,199 @@ def linear_programming(
         return None
     except ImportError:
         raise ImportError("scipy is required for linear_programming()")
+
+
+def bfgs(
+    f: Callable[[List[float]], float],
+    x0: List[float],
+    max_iter: int = 100,
+    tol: float = 1e-6
+) -> Tuple[List[float], float]:
+    """BFGS quasi-Newton optimization."""
+    import math
+    
+    x = [float(v) for v in x0]
+    n = len(x0)
+    
+    # Initial inverse Hessian = identity
+    H = [[1.0 if i == j else 0.0 for j in range(n)] for i in range(n)]
+    
+    def compute_gradient(x, h=1e-6):
+        f0 = f(x)
+        return [(f([x[k] + (h if k==i else x[k]) for k in range(n)]) - f0) / h 
+                for i in range(n)]
+    
+    for iteration in range(max_iter):
+        grad = compute_gradient(x)
+        
+        # Check convergence
+        grad_norm = math.sqrt(sum(g**2 for g in grad))
+        if grad_norm < tol:
+            break
+        
+        # Search direction: p = -H @ grad
+        p = [-sum(H[i][j] * grad[j] for j in range(n)) for i in range(n)]
+        
+        # Simple backtracking line search
+        alpha = 1.0
+        fx = f(x)
+        
+        for _ in range(50):
+            x_new = [x[i] + alpha * p[i] for i in range(n)]
+            fx_new = f(x_new)
+            if fx_new < fx:
+                break
+            alpha *= 0.5
+        else:
+            # Line search failed, try gradient descent
+            x_new = [x[i] - 0.1 * grad[i] for i in range(n)]
+            if f(x_new) >= fx:
+                break
+        
+        grad_new = compute_gradient(x_new)
+        
+        # s = x_new - x, y = grad_new - grad
+        s = [x_new[i] - x[i] for i in range(n)]
+        y = [grad_new[i] - grad[i] for i in range(n)]
+        
+        # BFGS update for inverse Hessian
+        yTs = sum(y[i] * s[i] for i in range(n))
+        if abs(yTs) < 1e-12:
+            x = x_new
+            continue
+        
+        # BFGS formula: H_new = H + (1 + yT H y / yTs) * s s^T / yTs - (s yT H + H y s^T) / yTs
+        Hy = [sum(H[i][j] * y[j] for j in range(n)) for i in range(n)]
+        yHy = sum(y[i] * Hy[i] for i in range(n))
+        
+        for i in range(n):
+            for j in range(n):
+                H[i][j] += (1.0 + yHy / yTs) * s[i] * s[j] / yTs \
+                           - (s[i] * Hy[j] + Hy[i] * s[j]) / yTs
+        
+        x = x_new
+    
+    return x, f(x)
+
+
+def lbfgs(
+    f: Callable[[List[float]], float],
+    x0: List[float],
+    max_iter: int = 100,
+    tol: float = 1e-6,
+    m: int = 10,
+    learning_rate: float = 0.1
+) -> Tuple[List[float], float]:
+    """Limited-memory BFGS (L-BFGS) optimization.
+    
+    Uses limited memory to store only the last m (s, y) pairs.
+    
+    Args:
+        f: Objective function to minimize
+        x0: Initial point
+        max_iter: Maximum iterations
+        tol: Gradient tolerance
+        m: Memory size (number of past updates to store)
+        learning_rate: Step size for line search
+        
+    Returns:
+        (x_opt, f_opt)
+    """
+    import math
+    
+    x = x0[:]
+    n = len(x0)
+    
+    # Storage for (s, y) pairs
+    s_history = []
+    y_history = []
+    rho_history = []
+    
+    def compute_gradient(f, x, h=1e-6):
+        """Compute gradient using finite differences."""
+        grad = []
+        f0 = f(x)
+        for i in range(n):
+            x_h = x[:]
+            x_h[i] += h
+            grad.append((f(x_h) - f0) / h)
+        return grad
+    
+    for iteration in range(max_iter):
+        grad = compute_gradient(f, x)
+        
+        # Check convergence
+        grad_norm = math.sqrt(sum(g**2 for g in grad))
+        if grad_norm < tol:
+            break
+        
+        # Two-loop recursion to compute search direction
+        q = grad[:]
+        alphas = []
+        
+        # First loop
+        for i in range(len(s_history) - 1, -1, -1):
+            alpha = rho_history[i] * sum(s_history[i][j] * q[j] for j in range(n))
+            alphas.append(alpha)
+            q = [q[j] - alpha * y_history[i][j] for j in range(n)]
+        
+        # Apply initial Hessian approximation (scaling)
+        if s_history:
+            last_s = s_history[-1]
+            last_y = y_history[-1]
+            gamma = sum(last_s[i] * last_y[i] for i in range(n)) / \
+                    sum(y * y for y in last_y)
+            r = [gamma * q[j] for j in range(n)]
+        else:
+            r = q[:]
+        
+        # Second loop
+        for i in range(len(s_history)):
+            beta = rho_history[i] * sum(y_history[i][j] * r[j] for j in range(n))
+            r = [r[j] + s_history[i][j] * (alphas[len(s_history) - 1 - i] - beta) 
+                 for j in range(n)]
+        
+        # Search direction
+        p = [-r[j] for j in range(n)]
+        
+        # Line search
+        alpha = learning_rate
+        fx = f(x)
+        for _ in range(10):
+            x_new = [x[i] + alpha * p[i] for i in range(n)]
+            fx_new = f(x_new)
+            if fx_new < fx:
+                break
+            alpha *= 0.5
+        else:
+            x_new = [x[i] - learning_rate * grad[i] for i in range(n)]
+        
+        # Compute new gradient
+        grad_new = compute_gradient(f, x_new)
+        
+        # Compute s and y
+        s = [x_new[i] - x[i] for i in range(n)]
+        y = [grad_new[i] - grad[i] for i in range(n)]
+        
+        # Compute rho
+        yTs = sum(y[i] * s[i] for i in range(n))
+        if abs(yTs) < 1e-10:
+            x = x_new
+            continue
+        
+        rho = 1.0 / yTs
+        
+        # Update history
+        s_history.append(s)
+        y_history.append(y)
+        rho_history.append(rho)
+        
+        # Keep only last m pairs
+        if len(s_history) > m:
+            s_history.pop(0)
+            y_history.pop(0)
+            rho_history.pop(0)
+        
+        x = x_new
+    
+    return x, f(x)
