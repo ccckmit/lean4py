@@ -422,6 +422,45 @@ from lean4py.representation_theory import (
     CharacterTable,
 )
 
+from lean4py.stacks import (
+    Groupoid,
+    PresheafOfGroupoids,
+    Stack,
+    DMStack,
+    ArtinStack,
+    ModuliSpace,
+    GITQuotient,
+    DescentData,
+)
+
+from lean4py.lie_groups import (
+    LieGroup,
+    ClosedSubgroup,
+    LieSubgroup,
+    UnitaryRepresentation,
+    AdjointRepresentation,
+    ExponentialMap,
+    BakerCampbellHausdorff,
+    LieGroupCorrespondence,
+    ClassicalGroups,
+    OneParameterSubgroup,
+    LieGroupHomomorphism,
+)
+
+from lean4py.operator_algebras import (
+    NormedSpace,
+    HilbertSpace,
+    BoundedOperator,
+    CStarAlgebra,
+    PositiveElement,
+    VonNeumannAlgebra,
+    SpectralTheorem,
+    FunctionalCalculus,
+    K0Group,
+    K1Group,
+    IndexTheory,
+)
+
 from lean4py.exceptions import (
     Lean4PyError,
     DimensionError,
@@ -431,7 +470,7 @@ from lean4py.exceptions import (
     ProbabilityError,
 )
 
-__version__ = "1.13.0"
+__version__ = "1.15.0"
 __all__ = [
     "Prop", "Prop_var", "implies", "and_", "or_", "not_", "iff",
     "Theorem", "ProofStep", "assume", "have", "exact", "apply", "rfl", "simp", "prove",
@@ -511,4 +550,9 @@ __all__ = [
     "GroupRepresentation", "RepresentationHomomorphism", "Character", "IrreducibleRepresentation",
     "RegularRepresentation", "InducedRepresentation", "FrobeniusReciprocity",
     "MaschkeTheorem", "TensorProductRepresentations", "CharacterTable",
+    "Groupoid", "PresheafOfGroupoids", "Stack", "DMStack", "ArtinStack", "ModuliSpace", "GITQuotient",
+    "LieGroup", "ClosedSubgroup", "LieSubgroup", "UnitaryRepresentation", "AdjointRepresentation",
+    "ExponentialMap", "BakerCampbellHausdorff", "LieGroupCorrespondence", "ClassicalGroups",
+    "NormedSpace", "HilbertSpace", "BoundedOperator", "CStarAlgebra", "PositiveElement",
+    "VonNeumannAlgebra", "SpectralTheorem", "FunctionalCalculus", "K0Group", "K1Group", "IndexTheory",
 ]
