@@ -575,3 +575,169 @@ def lbfgs(
         x = x_new
     
     return x, f(x)
+
+
+def newton_raphson(
+    f: Callable[[List[float]], float],
+    x0: List[float],
+    max_iter: int = 100,
+    tol: float = 1e-6
+) -> Tuple[List[float], float]:
+    """Newton-Raphson method for optimization."""
+    import math
+    
+    x = [float(v) for v in x0]
+    n = len(x0)
+    
+    def compute_gradient(x, h=1e-6):
+        f0 = f(x)
+        return [(f([x[k] + (h if k==i else x[k]) for k in range(n)]) - f0) / h 
+                for i in range(n)]
+    
+    def compute_hessian(x, h=1e-6):
+        hessian = [[0.0] * n for _ in range(n)]
+        
+        # Diagonal elements
+        for i in range(n):
+            x_plus = x[:]; x_plus[i] += h
+            x_minus = x[:]; x_minus[i] -= h
+            f_plus = f(x_plus)
+            f_minus = f(x_minus)
+            hessian[i][i] = (f_plus - 2*f(x) + f_minus) / (h**2)
+        
+        # Off-diagonal elements
+        for i in range(n):
+            for j in range(i+1, n):
+                x_pp = x[:]; x_pp[i] += h; x_pp[j] += h
+                x_pm = x[:]; x_pm[i] += h; x_pm[j] -= h
+                x_mp = x[:]; x_mp[i] -= h; x_mp[j] += h
+                x_mm = x[:]; x_mm[i] -= h; x_mm[j] -= h
+                hessian[i][j] = (f(x_pp) - f(x_pm) - f(x_mp) + f(x_mm)) / (4 * h**2)
+                hessian[j][i] = hessian[i][j]
+        
+        return hessian
+    
+    for iteration in range(max_iter):
+        grad = compute_gradient(x)
+        
+        # Check convergence
+        grad_norm = math.sqrt(sum(g**2 for g in grad))
+        if grad_norm < tol:
+            break
+        
+        # Compute Hessian
+        H = compute_hessian(x)
+        
+        # Invert Hessian (simple 2x2 or 1x1)
+        if n == 1:
+            H_inv = [[1.0 / H[0][0]]] if abs(H[0][0]) > 1e-12 else [[1.0]]
+        elif n == 2:
+            det = H[0][0] * H[1][1] - H[0][1] * H[1][0]
+            if abs(det) < 1e-12:
+                H_inv = [[1.0, 0.0], [0.0, 1.0]]
+            else:
+                H_inv = [[H[1][1]/det, -H[0][1]/det], [-H[1][0]/det, H[0][0]/det]]
+        else:
+            H_inv = [[1.0 if i==j else 0.0 for j in range(n)] for i in range(n)]
+        
+        # Newton update: x_new = x - H^(-1) * grad
+        delta = [-sum(H_inv[i][j] * grad[j] for j in range(n)) for i in range(n)]
+        
+        # Line search
+        alpha = 1.0
+        fx = f(x)
+        for _ in range(10):
+            x_new = [x[i] + alpha * delta[i] for i in range(n)]
+            if f(x_new) < fx:
+                break
+            alpha *= 0.5
+        else:
+            break
+        
+        x = x_new
+    
+    return x, f(x)
+
+
+def levenberg_marquardt(
+    residuals: Callable[[List[float]], List[float]],
+    x0: List[float],
+    max_iter: int = 100,
+    tol: float = 1e-6,
+    lambda_init: float = 0.01
+) -> Tuple[List[float], List[float]]:
+    """Levenberg-Marquardt algorithm for nonlinear least squares."""
+    import math
+    
+    x = [float(v) for v in x0]
+    n = len(x0)
+    lam = lambda_init
+    
+    def compute_jacobian(x, h=1e-6):
+        r0 = residuals(x)
+        m = len(r0)
+        J = [[0.0] * n for _ in range(m)]
+        
+        for j in range(n):
+            x_pert = x[:]
+            x_pert[j] += h
+            r_pert = residuals(x_pert)
+            for i in range(m):
+                J[i][j] = (r_pert[i] - r0[i]) / h
+        
+        return J, r0
+    
+    for iteration in range(max_iter):
+        J, r = compute_jacobian(x)
+        m = len(r)
+        
+        # Compute J^T J and J^T r
+        JtJ = [[0.0] * n for _ in range(n)]
+        for i in range(n):
+            for j in range(n):
+                JtJ[i][j] = sum(J[k][i] * J[k][j] for k in range(m))
+        
+        Jtr = [sum(J[k][i] * r[k] for k in range(m)) for i in range(n)]
+        
+        # Check convergence
+        grad_norm = math.sqrt(sum(g**2 for g in Jtr))
+        if grad_norm < tol:
+            break
+        
+        # Add damping
+        for i in range(n):
+            JtJ[i][i] += lam
+        
+        # Solve (J^T J + lambda*I) * delta = -J^T r
+        if n == 1:
+            if abs(JtJ[0][0]) < 1e-12:
+                delta = [-Jtr[0]]
+            else:
+                delta = [-Jtr[0] / JtJ[0][0]]
+        elif n == 2:
+            det = JtJ[0][0] * JtJ[1][1] - JtJ[0][1] * JtJ[1][0]
+            if abs(det) < 1e-12:
+                delta = [-Jtr[i] for i in range(2)]
+            else:
+                delta = [(-JtJ[1][1]*Jtr[0] + JtJ[0][1]*Jtr[1])/det,
+                          (JtJ[0][0]*Jtr[1] - JtJ[1][0]*Jtr[0])/det]
+        else:
+            delta = [-Jtr[i] / (JtJ[i][i]) for i in range(n)]
+        
+        # Update parameters
+        x_new = [x[i] + delta[i] for i in range(n)]
+        
+        # Check if error decreased
+        r_new = residuals(x_new)
+        error_new = sum(r**2 for r in r_new)
+        error_old = sum(r_i**2 for r_i in r)
+        
+        if error_new < error_old:
+            x = x_new
+            lam *= 0.7  # Decrease damping
+        else:
+            lam *= 2.0  # Increase damping
+            if lam > 1e6:
+                break
+    
+    return x, residuals(x)

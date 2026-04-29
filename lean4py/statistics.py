@@ -237,3 +237,161 @@ def linear_regression_diagnostics(x: List[float], y: List[float]) -> dict:
         'residuals': residuals,
         'fitted_values': fitted
     }
+
+
+def mann_kendall(x: List[float]) -> Tuple[float, float]:
+    """Mann-Kendall trend test.
+    
+    Tests for monotonic trend in time series.
+    
+    Args:
+        x: Time series data
+        
+    Returns:
+        (tau, p-value)
+    """
+    import math
+    
+    n = len(x)
+    if n < 2:
+        return 0.0, 1.0
+    
+    # Count concordant and discordant pairs
+    S = 0
+    for i in range(n - 1):
+        for j in range(i + 1, n):
+            if x[j] > x[i]:
+                S += 1
+            elif x[j] < x[i]:
+                S -= 1
+    
+    # Variance of S
+    var_S = n * (n - 1) * (2 * n + 5) / 18
+    if var_S == 0:
+        return 0.0, 1.0
+    
+    # Standardized test statistic
+    if S > 0:
+        Z = (S - 1) / math.sqrt(var_S)
+    elif S < 0:
+        Z = (S + 1) / math.sqrt(var_S)
+    else:
+        Z = 0.0
+    
+    # Approximate p-value (two-tailed)
+    p = 2 * (1 - 0.5 * (1 + math.erf(abs(Z) / math.sqrt(2))))
+    
+    # Kendall's tau
+    tau = S / (n * (n - 1) / 2)
+    
+    return tau, p
+
+
+def wilcoxon_signed_rank(x: List[float], mu: float = 0.0) -> Tuple[float, float]:
+    """Wilcoxon signed-rank test for one sample.
+    
+    Tests whether median of differences from mu is zero.
+    
+    Args:
+        x: Sample data
+        mu: Hypothesized median (default 0)
+        
+    Returns:
+        (W statistic, p-value)
+    """
+    import math
+    
+    # Compute differences
+    diffs = [v - mu for v in x if v != mu]
+    n = len(diffs)
+    
+    if n == 0:
+        return 0.0, 1.0
+    
+    # Rank absolute differences
+    abs_diffs = [abs(d) for d in diffs]
+    ranked = sorted(range(n), key=lambda i: abs_diffs[i])
+    
+    # Assign ranks (average for ties)
+    ranks = [0.0] * n
+    i = 0
+    while i < n:
+        j = i
+        while j < n - 1 and abs_diffs[ranked[j]] == abs_diffs[ranked[j + 1]]:
+            j += 1
+        avg_rank = (i + j) / 2.0 + 1  # 1-indexed ranks
+        for k in range(i, j + 1):
+            ranks[ranked[k]] = avg_rank
+        i = j + 1
+    
+    # Compute W+ (sum of ranks for positive differences)
+    W_plus = sum(ranks[i] for i in range(n) if diffs[i] > 0)
+    W_minus = sum(ranks[i] for i in range(n) if diffs[i] < 0)
+    W = min(W_plus, W_minus)
+    
+    # Approximate p-value (normal approximation)
+    mean_W = n * (n + 1) / 4
+    var_W = n * (n + 1) * (2 * n + 1) / 24
+    
+    if var_W == 0:
+        return W, 1.0
+    
+    Z = (W - mean_W) / math.sqrt(var_W)
+    p = 2 * (1 - 0.5 * (1 + math.erf(abs(Z) / math.sqrt(2))))
+    
+    return W, p
+
+
+def wilcoxon_rank_sum(x: List[float], y: List[float]) -> Tuple[float, float]:
+    """Wilcoxon rank-sum test (Mann-Whitney U test alternative).
+    
+    Tests whether two samples come from same distribution.
+    
+    Args:
+        x: First sample
+        y: Second sample
+        
+    Returns:
+        (U statistic, p-value)
+    """
+    import math
+    
+    n1, n2 = len(x), len(y)
+    if n1 == 0 or n2 == 0:
+        return 0.0, 1.0
+    
+    # Combine and rank
+    combined = [(v, 0) for v in x] + [(v, 1) for v in y]
+    combined.sort(key=lambda p: p[0])
+    
+    # Assign ranks
+    ranks = [0.0] * (n1 + n2)
+    i = 0
+    while i < len(combined):
+        j = i
+        while j < len(combined) - 1 and combined[j][0] == combined[j + 1][0]:
+            j += 1
+        avg_rank = (i + j) / 2.0 + 1
+        for k in range(i, j + 1):
+            ranks[k] = avg_rank
+        i = j + 1
+    
+    # Sum of ranks for first sample
+    rank_sum = sum(ranks[i] for i in range(n1))
+    
+    # U statistic
+    U1 = rank_sum - n1 * (n1 + 1) / 2
+    U2 = n1 * n2 - U1
+    U = min(U1, U2)
+    
+    # Normal approximation
+    mean_U = n1 * n2 / 2
+    var_U = n1 * n2 * (n1 + n2 + 1) / 12
+    
+    if var_U == 0:
+        return U, 1.0
+    
+    Z = (U - mean_U) / math.sqrt(var_U)
+    p = 2 * (1 - 0.5 * (1 + math.erf(abs(Z) / math.sqrt(2))))
+    
+    return U, p

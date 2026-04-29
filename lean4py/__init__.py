@@ -255,6 +255,9 @@ from lean4py.statistics import (
     mann_whitney_u,
     kruskal_wallis,
     linear_regression_diagnostics,
+    mann_kendall,
+    wilcoxon_signed_rank,
+    wilcoxon_rank_sum,
 )
 
 from lean4py.symbolic import (
@@ -329,6 +332,19 @@ from lean4py.linear_algebra import (
     pca,
 )
 
+from lean4py.reinforcement_learning import (
+    QLearning,
+    SARSA,
+    epsilon_greedy,
+    run_episode,
+)
+
+from lean4py.gaussian_process import (
+    GaussianProcessRegressor,
+    rbf_kernel,
+    predict_gp,
+)
+
 from lean4py.optimization import (
     gradient_descent,
     linear_programming,
@@ -339,6 +355,8 @@ from lean4py.optimization import (
     augmented_lagrange,
     bfgs,
     lbfgs,
+    newton_raphson,
+    levenberg_marquardt,
 )
 
 from lean4py.exceptions import (
@@ -350,7 +368,7 @@ from lean4py.exceptions import (
     ProbabilityError,
 )
 
-__version__ = "1.7.0"
+__version__ = "1.8.0"
 __all__ = [
     "Prop", "Prop_var", "implies", "and_", "or_", "not_", "iff",
     "Theorem", "ProofStep", "assume", "have", "exact", "apply", "rfl", "simp", "prove",
