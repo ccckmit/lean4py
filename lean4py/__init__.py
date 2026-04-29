@@ -380,6 +380,48 @@ from lean4py.optimization import (
     levenberg_marquardt,
 )
 
+from lean4py.homological_algebra import (
+    ChainComplex,
+    CochainComplex,
+    LongExactSequence,
+    Ext,
+    Tor,
+)
+
+from lean4py.sheaf import (
+    TopologicalSpace,
+    Presheaf,
+    Sheaf,
+    SheafCohomology,
+    AffineScheme,
+    Spec,
+)
+
+from lean4py.lie_algebra import (
+    LieAlgebra,
+    LieSubalgebra,
+    LieAlgebraRepresentation,
+    AdjointRepresentation,
+    UniversalEnvelopingAlgebra,
+    SerreRelations,
+    RootSystem,
+    sl2_lie_algebra,
+    gl2_lie_algebra,
+)
+
+from lean4py.representation_theory import (
+    GroupRepresentation,
+    RepresentationHomomorphism,
+    Character,
+    IrreducibleRepresentation,
+    RegularRepresentation,
+    InducedRepresentation,
+    FrobeniusReciprocity,
+    MaschkeTheorem,
+    TensorProductRepresentations,
+    CharacterTable,
+)
+
 from lean4py.exceptions import (
     Lean4PyError,
     DimensionError,
@@ -389,7 +431,7 @@ from lean4py.exceptions import (
     ProbabilityError,
 )
 
-__version__ = "1.9.0"
+__version__ = "1.13.0"
 __all__ = [
     "Prop", "Prop_var", "implies", "and_", "or_", "not_", "iff",
     "Theorem", "ProofStep", "assume", "have", "exact", "apply", "rfl", "simp", "prove",
@@ -461,4 +503,12 @@ __all__ = [
     "covariance", "correlation",
     "linear_regression",
     "skewness", "kurtosis",
+    "ChainComplex", "CochainComplex", "LongExactSequence", "Ext", "Tor",
+    "TopologicalSpace", "Presheaf", "Sheaf", "SheafCohomology", "AffineScheme", "Spec",
+    "LieAlgebra", "LieSubalgebra", "LieAlgebraRepresentation", "AdjointRepresentation",
+    "UniversalEnvelopingAlgebra", "SerreRelations", "RootSystem",
+    "sl2_lie_algebra", "gl2_lie_algebra",
+    "GroupRepresentation", "RepresentationHomomorphism", "Character", "IrreducibleRepresentation",
+    "RegularRepresentation", "InducedRepresentation", "FrobeniusReciprocity",
+    "MaschkeTheorem", "TensorProductRepresentations", "CharacterTable",
 ]

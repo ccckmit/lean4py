@@ -17,10 +17,10 @@ pytest tests/test_<module>.py -v       # Single module
 - Check version: `python -c "import lean4py; print(lean4py.__version__)"`
 
 ## Structure
-- `lean4py/` - Core modules: logic, sets, algebra, nat, tactics, prover, number_theory, linear_algebra, real_analysis, probability, graph_theory, statistics, optimization, symbolic, pde, time_series, ml_basics, neural_network, bayesian, signal_processing, information_theory, reinforcement_learning, gaussian_process, hmm, kalman_filter, sparse_coding, manifold_learning, gnn, variational_inference, information_retrieval
+- `lean4py/` - Core modules: logic, sets, algebra, nat, tactics, prover, number_theory, linear_algebra, real_analysis, probability, graph_theory, statistics, optimization, symbolic, pde, time_series, ml_basics, neural_network, bayesian, signal_processing, information_theory, reinforcement_learning, gaussian_process, hmm, kalman_filter, sparse_coding, manifold_learning, gnn, variational_inference, information_retrieval, homological_algebra, sheaf, lie_algebra, representation_theory
 - `tests/` - pytest tests (one-to-one with modules)
 - `examples/` - Numbered usage examples
-- `_doc/` - Version planning documents (v0.1 - v1.11)
+- `_doc/` - Version planning documents (v0.1 - v1.13)
 
 ## Critical Implementation Notes
 
@@ -35,11 +35,11 @@ pytest tests/test_<module>.py -v       # Single module
 - Always use `==` for equality checks in prover logic
 
 ### Module Organization
-- `algebra.py` - Magma through Field (basic); v1.11 extends to Module, Ideal, Lattice
+- `algebra.py` - Magma through Field (basic); extended to Module, Ideal, Lattice
 - `linear_algebra.py` - Vector, Matrix, eigenvalues; also exports `compute_mean_vector`, `compute_covariance_matrix`, `pca`
 - `real_analysis.py` - Sequence/Function limit, derivative, integral, ODE solvers
 
 ## Version History
-- v1.9: HMM, Kalman Filter, Sparse Coding, Manifold Learning
-- v1.10: (not released)
 - v1.11: Category theory, Module theory, Ideal/Lattice, Group/Ring extensions
+- v1.12: (not released)
+- v1.13: Homological algebra, Sheaf theory, Lie algebras, Extended representation theory
