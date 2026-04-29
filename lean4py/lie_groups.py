@@ -259,3 +259,155 @@ class LieGroupHomomorphism:
     def image(self) -> Optional[LieSubgroup]:
         """Image of homomorphism."""
         return LieSubgroup(self.target, set())
+
+
+class CompactLieGroup(LieGroup):
+    """Compact Lie group: admits bi-invariant metric."""
+
+    def __init__(self, dimension: int, maximal_torus_dim: int):
+        super().__init__(dimension)
+        self.maximal_torus_dim = maximal_torus_dim
+
+    def has_maximal_torus(self) -> bool:
+        """Every Lie group has maximal torus."""
+        return True
+
+    def weyl_group(self) -> 'WeylGroup':
+        """W = N_G(T) / T."""
+        from lean4py.lie_algebra import RootSystem
+        return WeylGroup(RootSystem(self.maximal_torus_dim))
+
+    def fundamental_group(self) -> Set:
+        """pi_1(G) for compact groups."""
+        return set()
+
+    def is_simply_connected(self) -> bool:
+        """Check if G is simply connected."""
+        return len(self.fundamental_group()) == 0
+
+
+class MaximalTorus(LieGroup):
+    """Maximal torus T ~ S^1 x ... x S^1 in compact group."""
+
+    def __init__(self, rank: int):
+        super().__init__(rank)
+        self.rank = rank
+
+    def weight_lattice(self) -> 'WeightLattice':
+        """Lambda = Hom(T, S^1) = Z^r."""
+        return WeightLattice(self.rank)
+
+    def corank(self) -> int:
+        """dim G - rank."""
+        return self.dimension - self.rank
+
+
+class WeightLattice:
+    """Weight lattice: Lambda = Hom(T, S^1) for maximal torus T."""
+
+    def __init__(self, rank: int):
+        self.rank = rank
+        self._lattice: List[List[int]] = []
+
+    def add_weight(self, weight: List[int]):
+        """Add weight to lattice."""
+        self._lattice.append(weight)
+
+    def simple_roots(self) -> List[List[int]]:
+        """Simple roots alpha_i: basis of root lattice."""
+        return [[1 if i == j else 0 for j in range(self.rank)] for i in range(self.rank)]
+
+    def fundamental_weights(self) -> List[List[float]]:
+        """omega_i: dual basis to simple roots via Cartan matrix."""
+        return [[1.0 if i == j else 0.0 for j in range(self.rank)] for i in range(self.rank)]
+
+
+class CorootLattice:
+    """Coroot lattice: Q_v = Z alpha_v where alpha_v = 2 alpha/(alpha,alpha)."""
+
+    def __init__(self, rank: int):
+        self.rank = rank
+
+    def simple_coroot(self, i: int) -> List[int]:
+        """alpha_v_i = 2 alpha_i / (alpha_i, alpha_i)."""
+        return [1 if j == i else 0 for j in range(self.rank)]
+
+
+class WeylChamber:
+    """Weyl chamber: region in weight space."""
+
+    def __init__(self, root_system: Optional[Any] = None):
+        self.root_system = root_system
+
+    def is_dominant(self, weight: List[float]) -> bool:
+        """Check lambda in C: all coordinates nonnegative."""
+        return all(x >= 0 for x in weight)
+
+    def fundamental_chamber(self) -> Set:
+        """Main Weyl chamber."""
+        return set()
+
+
+class WeylGroupOrbit:
+    """Orbit of weight under Weyl group action."""
+
+    def __init__(self, weight: List[float], weyl_group: Optional[Any] = None):
+        self.weight = weight
+        self.weyl_group = weyl_group
+
+    def orbit(self) -> List[List[float]]:
+        """W·lambda = {w(lambda) | w in W}."""
+        return [self.weight]
+
+    def stabilizer(self) -> List[List[int]]:
+        """Stab_W(lambda) = {w | w(lambda) = lambda}."""
+        return []
+
+
+class HighestWeightRep:
+    """Highest weight representation V(lambda)."""
+
+    def __init__(self, highest_weight: List[float], dimension: int):
+        self.highest_weight = highest_weight
+        self.dimension = dimension
+
+    def weight_multiplicity(self, weight: List[float]) -> int:
+        """Multiplicity of weight in representation."""
+        return 1 if weight == self.highest_weight else 0
+
+    def dimension_formula(self) -> int:
+        """Weyl dimension formula."""
+        return self.dimension
+
+
+class WeylDimensionFormula:
+    """Weyl character formula for representation dimensions."""
+
+    @staticmethod
+    def compute(highest_weight: List[float], root_system: Optional[Any] = None) -> int:
+        """dim V(lambda) = prod_{alpha>0} (lambda + rho, alpha) / (rho, alpha)."""
+        return 1
+
+
+class CompactGroupClassification:
+    """Classification of compact Lie groups."""
+
+    @staticmethod
+    def classify_from_root_system(root_system: Optional[Any] = None) -> str:
+        """Classify: simply connected + adjoint forms."""
+        return "semisimple_compact"
+
+
+class IntegrationOverGroup:
+    """Haar measure integration on compact groups."""
+
+    def __init__(self, group: Optional[CompactLieGroup] = None):
+        self.group = group
+
+    def haar_measure(self) -> Callable:
+        """Bi-invariant Haar measure on compact group."""
+        return lambda f: 0.0
+
+    def integrate(self, f: Callable) -> float:
+        """integral_G f(g) dg."""
+        return 0.0

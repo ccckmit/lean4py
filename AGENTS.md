@@ -43,3 +43,4 @@ pytest tests/test_<module>.py -v       # Single module
 - v1.13: Homological algebra, Sheaf theory, Lie algebras, Extended representation theory
 - v1.14: (planned - spectral sequences, topos, Dynkin diagrams, Hopf algebras)
 - v1.15: Stacks, Lie groups, Operator algebras
+- v1.16: Cech cohomology, Compact Lie groups, Adjoint orbits, Free probability

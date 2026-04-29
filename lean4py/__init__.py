@@ -422,17 +422,6 @@ from lean4py.representation_theory import (
     CharacterTable,
 )
 
-from lean4py.stacks import (
-    Groupoid,
-    PresheafOfGroupoids,
-    Stack,
-    DMStack,
-    ArtinStack,
-    ModuliSpace,
-    GITQuotient,
-    DescentData,
-)
-
 from lean4py.lie_groups import (
     LieGroup,
     ClosedSubgroup,
@@ -445,6 +434,73 @@ from lean4py.lie_groups import (
     ClassicalGroups,
     OneParameterSubgroup,
     LieGroupHomomorphism,
+    CompactLieGroup,
+    MaximalTorus,
+    WeightLattice,
+    CorootLattice,
+    WeylChamber,
+    WeylGroupOrbit,
+    HighestWeightRep,
+    WeylDimensionFormula,
+    CompactGroupClassification,
+    IntegrationOverGroup,
+)
+
+from lean4py.stacks import (
+    Groupoid,
+    PresheafOfGroupoids,
+    Stack,
+    DMStack,
+    ArtinStack,
+    ModuliSpace,
+    GITQuotient,
+    DescentData,
+    FiberedCategory,
+    CechCohomology,
+    CechComplex,
+    SheafCohomologyGroups,
+    DerivedPushforward,
+    SpectralSequenceConvergence,
+    LeraySpectralSequence,
+    GrothendieckHigherDirectImage,
+    CartesianMorphism,
+    StackModuli,
+    PicardStack,
+    StabilityCondition,
+    GeometricInvariantTheory,
+    FormalSmoothMorphisms,
+    FormalUnramified,
+)
+
+from lean4py.free_probability import (
+    FreeProbabilitySpace,
+    FreeRandomVariable,
+    FreeCentralLimitTheorem,
+    MarchenkoPastur,
+    FreeConvolution,
+    NoncommutativeSpace,
+    SpectralTriple,
+    ConnesDifferential,
+    SpectralFlow,
+    FredholmModule,
+)
+
+from lean4py.adjunction_representation import (
+    AdjointAction,
+    Centralizer,
+    CoadjointRepresentation,
+    KirillovOrbit,
+    FlagVariety,
+    BorelSubgroup,
+    AdjointOrbit,
+    NilpotentOrbit,
+    OrbitMethod,
+    RootDecomposition,
+    PositiveSystem,
+    BorelSubalgebra,
+    ParabolicSubalgebra,
+    VermaModuleIndex,
+    CharacterFormula,
 )
 
 from lean4py.operator_algebras import (
@@ -470,7 +526,7 @@ from lean4py.exceptions import (
     ProbabilityError,
 )
 
-__version__ = "1.15.0"
+__version__ = "1.16.0"
 __all__ = [
     "Prop", "Prop_var", "implies", "and_", "or_", "not_", "iff",
     "Theorem", "ProofStep", "assume", "have", "exact", "apply", "rfl", "simp", "prove",
@@ -555,4 +611,18 @@ __all__ = [
     "ExponentialMap", "BakerCampbellHausdorff", "LieGroupCorrespondence", "ClassicalGroups",
     "NormedSpace", "HilbertSpace", "BoundedOperator", "CStarAlgebra", "PositiveElement",
     "VonNeumannAlgebra", "SpectralTheorem", "FunctionalCalculus", "K0Group", "K1Group", "IndexTheory",
+    "CompactLieGroup", "MaximalTorus", "WeightLattice", "CorootLattice", "WeylChamber",
+    "WeylGroupOrbit", "HighestWeightRep", "WeylDimensionFormula", "CompactGroupClassification",
+    "IntegrationOverGroup",
+    "CechCohomology", "CechComplex", "SheafCohomologyGroups", "DerivedPushforward",
+    "SpectralSequenceConvergence", "LeraySpectralSequence", "GrothendieckHigherDirectImage",
+    "CartesianMorphism", "StackModuli", "PicardStack", "StabilityCondition",
+    "GeometricInvariantTheory", "FormalSmoothMorphisms", "FormalUnramified",
+    "FreeProbabilitySpace", "FreeRandomVariable", "FreeCentralLimitTheorem", "MarchenkoPastur",
+    "FreeConvolution", "NoncommutativeSpace", "SpectralTriple", "ConnesDifferential",
+    "SpectralFlow", "FredholmModule",
+    "AdjointAction", "Centralizer", "CoadjointRepresentation", "KirillovOrbit",
+    "FlagVariety", "BorelSubgroup", "AdjointOrbit", "NilpotentOrbit",
+    "OrbitMethod", "RootDecomposition", "PositiveSystem", "BorelSubalgebra",
+    "ParabolicSubalgebra", "VermaModuleIndex", "CharacterFormula",
 ]
