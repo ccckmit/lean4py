@@ -503,6 +503,53 @@ from lean4py.adjunction_representation import (
     CharacterFormula,
 )
 
+from lean4py.derived_categories import (
+    DerivedCategory,
+    Hot,
+    TriangulatedCategory,
+    StableCategory,
+    DerivedFunctor,
+    RHom,
+    Lf,
+    Rf,
+    TorsionProduct,
+    ExtGroup,
+    HomologicalComplex,
+    ConnesExactTriangle,
+)
+
+from lean4py.free_operator_algebras import (
+    FreeGroup,
+    FreeGroupCStarAlgebra,
+    ReducedFreeGroupCStar,
+    FreeGroupVonNeumannAlgebra,
+    II1Factor,
+    FreeProductCStarAlgebra,
+    AmalgamatedFreeProduct,
+    ReducedFreeProduct,
+    FourierTransformOnGroups,
+    PlancherelTheorem,
+    GroupCStarAlgebra,
+    CrossedProduct,
+)
+
+from lean4py.kahler_geometry import (
+    ComplexManifold,
+    AlmostComplexStructure,
+    HermitianMetric,
+    KahlerManifold,
+    KahlerMetric,
+    ChernConnection,
+    FirstChernClass,
+    HolomorphicSection,
+    ComplexProjectiveSpace,
+    HermitianEinsteinMetric,
+    CalabiYauManifold,
+    ComplexSubmanifold,
+    CohomologyRing,
+    HolomorphicVectorBundle,
+)
+
 from lean4py.operator_algebras import (
     NormedSpace,
     HilbertSpace,
@@ -526,7 +573,7 @@ from lean4py.exceptions import (
     ProbabilityError,
 )
 
-__version__ = "1.16.0"
+__version__ = "1.17.0"
 __all__ = [
     "Prop", "Prop_var", "implies", "and_", "or_", "not_", "iff",
     "Theorem", "ProofStep", "assume", "have", "exact", "apply", "rfl", "simp", "prove",
@@ -625,4 +672,15 @@ __all__ = [
     "FlagVariety", "BorelSubgroup", "AdjointOrbit", "NilpotentOrbit",
     "OrbitMethod", "RootDecomposition", "PositiveSystem", "BorelSubalgebra",
     "ParabolicSubalgebra", "VermaModuleIndex", "CharacterFormula",
+    "DerivedCategory", "Hot", "TriangulatedCategory", "StableCategory",
+    "DerivedFunctor", "RHom", "Lf", "Rf", "TorsionProduct", "ExtGroup",
+    "HomologicalComplex", "ConnesExactTriangle",
+    "FreeGroup", "FreeGroupCStarAlgebra", "ReducedFreeGroupCStar",
+    "FreeGroupVonNeumannAlgebra", "II1Factor", "FreeProductCStarAlgebra",
+    "AmalgamatedFreeProduct", "ReducedFreeProduct", "FourierTransformOnGroups",
+    "PlancherelTheorem", "GroupCStarAlgebra", "CrossedProduct",
+    "ComplexManifold", "AlmostComplexStructure", "HermitianMetric",
+    "KahlerManifold", "KahlerMetric", "ChernConnection", "FirstChernClass",
+    "HolomorphicSection", "ComplexProjectiveSpace", "HermitianEinsteinMetric",
+    "CalabiYauManifold", "ComplexSubmanifold", "CohomologyRing", "HolomorphicVectorBundle",
 ]
