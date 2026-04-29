@@ -4,23 +4,26 @@
 ```bash
 pip install -e ".[dev]"
 ```
-Requires Python >=3.10. Dev dependencies (pytest, build, twine) defined in `pyproject.toml`.
+Requires Python >=3.10. Dev dependencies (pytest, build, twine) in `pyproject.toml`.
 
 ## Test
 ```bash
-pytest tests/                  # All tests
-pytest tests/test_<module>.py -v  # Single module (e.g., test_prover.py)
+pytest tests/                          # All tests
+pytest tests/test_<module>.py -v       # Single module
 ```
 
 ## Key Commands
-- Run examples: `python examples/<name>.py` (01_logic, 02_sets, 03_algebra, 04_number_theory, 04_prover, 05_linear_algebra, 06_real_analysis, 07_probability, 08_graph_theory)
+- Run examples: `python examples/<name>.py` (01_logic through 08_graph_theory)
+- Check version: `python -c "import lean4py; print(lean4py.__version__)"`
 
 ## Structure
-- `lean4py/` - Package: logic, sets, algebra, nat, tactics, prover, number_theory, linear_algebra, real_analysis, probability, graph_theory
+- `lean4py/` - Core modules: logic, sets, algebra, nat, tactics, prover, number_theory, linear_algebra, real_analysis, probability, graph_theory, statistics, optimization, symbolic, pde, time_series, ml_basics, neural_network, bayesian, signal_processing, information_theory, reinforcement_learning, gaussian_process, hmm, kalman_filter, sparse_coding, manifold_learning, gnn, variational_inference, information_retrieval
 - `tests/` - pytest tests (one-to-one with modules)
 - `examples/` - Numbered usage examples
+- `_doc/` - Version planning documents (v0.1 - v1.11)
 
 ## Critical Implementation Notes
+
 ### tableau_prove (prover.py)
 1. `¬(A → B)` expands to `[A, ¬B]` on one branch (α-rule), not two
 2. Negated literals (e.g., `¬p`) do not expand: `else: pass` in `_expand_branch`
@@ -31,15 +34,12 @@ pytest tests/test_<module>.py -v  # Single module (e.g., test_prover.py)
 - `Prop('p') is Prop('p')` is False (distinct objects)
 - Always use `==` for equality checks in prover logic
 
-## Modules
-- `lean4py.logic` - Prop, implies, and_, or_, not_, iff, Theorem, prove
-- `lean4py.sets` - Set_from, union, intersection, subset, complement, difference, etc.
-- `lean4py.algebra` - Magma, Semigroup, Monoid, Group, AbelianGroup, Ring, Field
-- `lean4py.nat` - Nat, zero, succ, pred, nat_add, nat_mul, etc.
-- `lean4py.tactics` - intros, cases, split, by, sorry, calc, TacticProof, etc.
-- `lean4py.prover` - tableau_prove, truth_table_prove, is_valid, is_satisfiable, find_counterexample
-- `lean4py.number_theory` - Integer, gcd, lcm, is_prime, phi, mod_exp, bezout_identity, etc.
-- `lean4py.linear_algebra` - Vector, Matrix, dot_product, det, rank, eigenvalues, etc.
-- `lean4py.real_analysis` - Real, limit, derivative, integral, series_sum, Function, etc.
-- `lean4py.probability` - ProbabilitySpace, ExpectedValue, NormalDistribution, bayes_theorem, etc.
-- `lean4py.graph_theory` - Graph, bfs, dfs, shortest_path, dijkstra, minimum_spanning_tree, etc.
+### Module Organization
+- `algebra.py` - Magma through Field (basic); v1.11 extends to Module, Ideal, Lattice
+- `linear_algebra.py` - Vector, Matrix, eigenvalues; also exports `compute_mean_vector`, `compute_covariance_matrix`, `pca`
+- `real_analysis.py` - Sequence/Function limit, derivative, integral, ODE solvers
+
+## Version History
+- v1.9: HMM, Kalman Filter, Sparse Coding, Manifold Learning
+- v1.10: (not released)
+- v1.11: Category theory, Module theory, Ideal/Lattice, Group/Ring extensions
