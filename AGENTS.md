@@ -17,10 +17,10 @@ pytest tests/test_<module>.py -v       # Single module
 - Check version: `python -c "import lean4py; print(lean4py.__version__)"`
 
 ## Structure
-- `lean4py/` - Core modules: logic, sets, algebra, nat, tactics, prover, number_theory, linear_algebra, real_analysis, probability, graph_theory, statistics, optimization, symbolic, pde, time_series, ml_basics, neural_network, bayesian, signal_processing, information_theory, reinforcement_learning, gaussian_process, hmm, kalman_filter, sparse_coding, manifold_learning, gnn, variational_inference, information_retrieval, homological_algebra, sheaf, lie_algebra, representation_theory, stacks, lie_groups, operator_algebras, free_probability, adjunction_representation, derived_categories, free_operator_algebras, kahler_geometry, spectral_sequence, topos, lie_algebra_classification, hopf_algebra
+- `lean4py/` - Core modules: logic, sets, algebra, nat, tactics, prover, number_theory, linear_algebra, real_analysis, probability, graph_theory, statistics, optimization, symbolic, pde, time_series, ml_basics, neural_network, bayesian, signal_processing, information_theory, reinforcement_learning, gaussian_process, hmm, kalman_filter, sparse_coding, manifold_learning, gnn, variational_inference, information_retrieval, homological_algebra, sheaf, lie_algebra, representation_theory, stacks, lie_groups, operator_algebras, free_probability, adjunction_representation, derived_categories, free_operator_algebras, kahler_geometry, spectral_sequence, topos, lie_algebra_classification, hopf_algebra, model_category, algebraic_geometry, numerical_methods, graph_algorithms
 - `tests/` - pytest tests (one-to-one with modules)
 - `examples/` - Numbered usage examples
-- `_doc/` - Version planning documents (v0.1 - v1.18)
+- `_doc/` - Version planning documents (v0.1 - v1.19)
 
 ## Critical Implementation Notes
 
@@ -46,3 +46,4 @@ pytest tests/test_<module>.py -v       # Single module
 - v1.16: Cech cohomology, Compact Lie groups, Adjoint orbits, Free probability
 - v1.17: Derived categories, Free operator algebras, Kähler geometry
 - v1.18: Spectral sequences, Topos theory, Lie algebra classification, Hopf algebras
+- v1.19: Model categories, Limits/colimits, Algebraic geometry, Numerical methods, Graph algorithms

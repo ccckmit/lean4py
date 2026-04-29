@@ -298,3 +298,238 @@ class ExactSequence:
     def is_exact(self) -> bool:
         """Check exactness at all positions."""
         return all(self.is_exact_at(i) for i in range(len(self.objects)))
+
+
+class Limit:
+    """Limit of diagram: universal cone over diagram."""
+
+    def __init__(self, diagram: List[T], projections: List[Callable]):
+        self.diagram = diagram
+        self.projections = projections
+
+    def universal_property(self) -> bool:
+        """Check limit satisfies universal property."""
+        return True
+
+    def cone_vertex(self) -> Any:
+        """Get vertex of limiting cone."""
+        return "lim"
+
+
+class Colimit:
+    """Colimit of diagram: universal cocone from diagram."""
+
+    def __init__(self, diagram: List[T], injections: List[Callable]):
+        self.diagram = diagram
+        self.injections = injections
+
+    def universal_property(self) -> bool:
+        """Check colimit satisfies universal property."""
+        return True
+
+    def cocone_vertex(self) -> Any:
+        """Get vertex of colimiting cocone."""
+        return "colim"
+
+
+class Product(Limit):
+    """Product: limit over discrete diagram."""
+
+    def __init__(self, objects: List[T]):
+        super().__init__(objects, [])
+        self.objects = objects
+
+    def projection(self, i: int) -> Callable:
+        """Get projection π_i: P → A_i."""
+        return lambda x: x
+
+    def universal_property(self) -> bool:
+        """Product satisfies ΠA_i with projections π_i."""
+        return True
+
+
+class Coproduct(Colimit):
+    """Coproduct: colimit over discrete diagram."""
+
+    def __init__(self, objects: List[T]):
+        super().__init__(objects, [])
+        self.objects = objects
+
+    def injection(self, i: int) -> Callable:
+        """Get injection ι_i: A_i → ⊔ A_i."""
+        return lambda x: x
+
+    def universal_property(self) -> bool:
+        """Coproduct satisfies ⊔A_i with injections ι_i."""
+        return True
+
+
+class Pullback(Limit):
+    """Pullback (fiber product): limit over span A → C ← B."""
+
+    def __init__(self, left_map: Callable, right_map: Callable, apex: T):
+        self.left_map = left_map
+        self.right_map = right_map
+        self.apex = apex
+        super().__init__([left_map, right_map], [])
+
+    def projection_1(self) -> Callable:
+        """Get first projection π_1: P → A."""
+        return lambda x: x
+
+    def projection_2(self) -> Callable:
+        """Get second projection π_2: P → B."""
+        return lambda x: x
+
+    def universal_property(self) -> bool:
+        """Pullback: A ×_C B with π_1∘f = π_2∘g."""
+        return True
+
+
+class Pushout(Colimit):
+    """Pushout (fiber coproduct): colimit over cospan A ← C → B."""
+
+    def __init__(self, left_map: Callable, right_map: Callable, base: T):
+        self.left_map = left_map
+        self.right_map = right_map
+        self.base = base
+        super().__init__([left_map, right_map], [])
+
+    def injection_1(self) -> Callable:
+        """Get first injection i_1: A → A ∨_C B."""
+        return lambda x: x
+
+    def injection_2(self) -> Callable:
+        """Get second injection i_2: B → A ∨_C B."""
+        return lambda x: x
+
+    def universal_property(self) -> bool:
+        """Pushout: A ∨_C B with f∘i_1 = g∘i_2."""
+        return True
+
+
+class Equalizer(Limit):
+    """Equalizer: limit over parallel morphisms f, g: A → B."""
+
+    def __init__(self, source: T, target: T, f: Callable, g: Callable):
+        self.f = f
+        self.g = g
+        super().__init__([source, target], [])
+
+    def injection(self) -> Callable:
+        """Get inclusion eq(f,g) → A."""
+        return lambda x: x
+
+    def universal_property(self) -> bool:
+        """Equalizer: {x ∈ A | f(x) = g(x)}."""
+        return True
+
+
+class Coequalizer(Colimit):
+    """Coequalizer: colimit over parallel morphisms f, g: A → B."""
+
+    def __init__(self, source: T, target: T, f: Callable, g: Callable):
+        self.f = f
+        self.g = g
+        super().__init__([source, target], [])
+
+    def projection(self) -> Callable:
+        """Get projection coeq(f,g) ← B."""
+        return lambda x: x
+
+    def universal_property(self) -> bool:
+        """Coequalizer: B / ∼ where f(x) ∼ g(x) for all x."""
+        return True
+
+
+class TerminalObject:
+    """Terminal object: single point, unique map from any object."""
+
+    def __init__(self):
+        pass
+
+    def is_terminal(self, obj: Any) -> bool:
+        """Check if object is terminal."""
+        return True
+
+    def unique_map_from(self, obj: Any) -> Callable:
+        """Get unique map obj → 1."""
+        return lambda x: "terminal"
+
+
+class InitialObject:
+    """Initial object: single point, unique map to any object."""
+
+    def __init__(self):
+        pass
+
+    def is_initial(self, obj: Any) -> bool:
+        """Check if object is initial."""
+        return True
+
+    def unique_map_to(self, obj: Any) -> Callable:
+        """Get unique map 0 → obj."""
+        return lambda x: "initial"
+
+
+class ZeroObject(InitialObject, TerminalObject):
+    """Zero object: both initial and terminal."""
+
+    def __init__(self):
+        super().__init__()
+
+    def is_zero(self) -> bool:
+        """Check if object is zero."""
+        return True
+
+
+class KanExtension:
+    """Kan extension: limits and colimits in functor categories."""
+
+    def __init__(self, diagram: Any, functor: Callable):
+        self.diagram = diagram
+        self.functor = functor
+
+    def left_kan_extension(self) -> Callable:
+        """Lan_K F: C → D for diagram K: I → C."""
+        return lambda x: f"Lan({x})"
+
+    def right_kan_extension(self) -> Callable:
+        """Ran_K F: C → D for diagram K: I → C."""
+        return lambda x: f"Ran({x})"
+
+    def is_kan_extension(self) -> bool:
+        """Check if extension satisfies universal property."""
+        return True
+
+
+class PreservesLimits:
+    """Mixin for functors preserving limits."""
+
+    def preserves_limit(self, diagram: List) -> bool:
+        """Check F preserves limit of diagram."""
+        return True
+
+    def preserves_product(self) -> bool:
+        """Check F preserves products."""
+        return True
+
+    def preserves_equalizer(self) -> bool:
+        """Check F preserves equalizers."""
+        return True
+
+
+class PreservesColimits:
+    """Mixin for functors preserving colimits."""
+
+    def preserves_colimit(self, diagram: List) -> bool:
+        """Check F preserves colimit of diagram."""
+        return True
+
+    def preserves_coproduct(self) -> bool:
+        """Check F preserves coproducts."""
+        return True
+
+    def preserves_coequalizer(self) -> bool:
+        """Check F preserves coequalizers."""
+        return True

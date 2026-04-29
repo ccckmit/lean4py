@@ -608,6 +608,94 @@ from lean4py.hopf_algebra import (
     braided_category,
 )
 
+from lean4py.model_category import (
+    ModelCategory,
+    QuillenAdjunction,
+    HomotopyCategory,
+    HomotopyEquivalence,
+    CWComplex,
+    SimplicialModelCategory,
+    WhiteheadTheorem,
+    Cofibration,
+    Fibration,
+    WeakEquivalence,
+    WeakFactorizationSystem,
+    AnodyneExtension,
+    HomotopyCoherent,
+)
+
+from lean4py.algebraic_geometry import (
+    ProjectiveSpace,
+    AlgebraicCurve,
+    RiemannRochResult,
+    Divisor,
+    LineBundle,
+    EllipticCurve,
+    Grassmannian,
+    RationalNormalCurve,
+    blowing_up,
+    SheafCohomologyAlgebraic,
+)
+
+from lean4py.numerical_methods import (
+    NewtonRaphson,
+    SecantMethod,
+    BisectionMethod,
+    FixedPointIteration,
+    LagrangeInterpolation,
+    NewtonInterpolation,
+    GaussianQuadrature,
+    SimpsonRule,
+    RombergIntegration,
+)
+
+from lean4py.graph_algorithms import (
+    GraphIsomorphism,
+    Treewidth,
+    PlanarGraph,
+    EulerianCircuit,
+    HamiltonianCycle,
+    GraphColoring,
+    Matching,
+    VertexCover,
+    NetworkFlow,
+    GraphCentrality,
+)
+
+from lean4py.topos import (
+    Topos,
+    SheafTopos,
+    BooleanTopos,
+    AbelianCategory,
+    Monomorphism,
+    Epimorphism,
+    ProjectiveObject,
+    InjectiveObject,
+    Generator,
+    Cogenerator,
+    ExactFunctor,
+    LeftExactFunctor,
+    RightExactFunctor,
+    Kernel,
+    Cokernel,
+    Image,
+    ExactSequence,
+    Limit,
+    Colimit,
+    Product,
+    Coproduct,
+    Pullback,
+    Pushout,
+    Equalizer,
+    Coequalizer,
+    TerminalObject,
+    InitialObject,
+    ZeroObject,
+    KanExtension,
+    PreservesLimits,
+    PreservesColimits,
+)
+
 from lean4py.operator_algebras import (
     NormedSpace,
     HilbertSpace,
@@ -631,7 +719,7 @@ from lean4py.exceptions import (
     ProbabilityError,
 )
 
-__version__ = "1.18.0"
+__version__ = "1.19.0"
 __all__ = [
     "Prop", "Prop_var", "implies", "and_", "or_", "not_", "iff",
     "Theorem", "ProofStep", "assume", "have", "exact", "apply", "rfl", "simp", "prove",
@@ -753,4 +841,20 @@ __all__ = [
     "Coalgebra", "Bialgebra", "HopfAlgebra", "GroupAlgebra", "QuantumGroup",
     "ModuleAlgebra", "InvariantTheory", "RepresentationOfHopfAlgebra",
     "sl2_hopf", "sl2_quantized", "DualHopfAlgebra", "braided_category",
+    "ModelCategory", "QuillenAdjunction", "HomotopyCategory", "HomotopyEquivalence",
+    "CWComplex", "SimplicialModelCategory", "WhiteheadTheorem",
+    "Cofibration", "Fibration", "WeakEquivalence", "WeakFactorizationSystem",
+    "AnodyneExtension", "HomotopyCoherent",
+    "ProjectiveSpace", "AlgebraicCurve", "RiemannRochResult", "Divisor", "LineBundle",
+    "EllipticCurve", "Grassmannian", "RationalNormalCurve", "blowing_up",
+    "SheafCohomologyAlgebraic",
+    "NewtonRaphson", "SecantMethod", "BisectionMethod", "FixedPointIteration",
+    "LagrangeInterpolation", "NewtonInterpolation", "GaussianQuadrature",
+    "SimpsonRule", "RombergIntegration",
+    "GraphIsomorphism", "Treewidth", "PlanarGraph", "EulerianCircuit",
+    "HamiltonianCycle", "GraphColoring", "Matching", "VertexCover",
+    "NetworkFlow", "GraphCentrality",
+    "Limit", "Colimit", "Product", "Coproduct", "Pullback", "Pushout",
+    "Equalizer", "Coequalizer", "TerminalObject", "InitialObject",
+    "ZeroObject", "KanExtension", "PreservesLimits", "PreservesColimits",
 ]
