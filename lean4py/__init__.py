@@ -550,6 +550,64 @@ from lean4py.kahler_geometry import (
     HolomorphicVectorBundle,
 )
 
+from lean4py.spectral_sequence import (
+    SpectralSequence,
+    AdamsSpectralSequence,
+    SerreSpectralSequence,
+    ExactCouple,
+    Hypercohomology,
+    FilteredComplex,
+    CohomologySpectralSequence,
+    HomologySpectralSequence,
+)
+
+from lean4py.topos import (
+    Topos,
+    SheafTopos,
+    BooleanTopos,
+    AbelianCategory,
+    Monomorphism,
+    Epimorphism,
+    ProjectiveObject,
+    InjectiveObject,
+    Generator,
+    Cogenerator,
+    ExactFunctor,
+    LeftExactFunctor,
+    RightExactFunctor,
+    Kernel,
+    Cokernel,
+    Image,
+    ExactSequence,
+)
+
+from lean4py.lie_algebra_classification import (
+    DynkinDiagram,
+    ClassificationTheorem,
+    Weight,
+    HighestWeightVector,
+    RootSystem,
+    WeylGroup,
+    VermaModule,
+    KostantForm,
+    SimpleLieAlgebra,
+)
+
+from lean4py.hopf_algebra import (
+    Coalgebra,
+    Bialgebra,
+    HopfAlgebra,
+    GroupAlgebra,
+    QuantumGroup,
+    ModuleAlgebra,
+    InvariantTheory,
+    RepresentationOfHopfAlgebra,
+    sl2_hopf,
+    sl2_quantized,
+    DualHopfAlgebra,
+    braided_category,
+)
+
 from lean4py.operator_algebras import (
     NormedSpace,
     HilbertSpace,
@@ -573,7 +631,7 @@ from lean4py.exceptions import (
     ProbabilityError,
 )
 
-__version__ = "1.17.0"
+__version__ = "1.18.0"
 __all__ = [
     "Prop", "Prop_var", "implies", "and_", "or_", "not_", "iff",
     "Theorem", "ProofStep", "assume", "have", "exact", "apply", "rfl", "simp", "prove",
@@ -647,6 +705,8 @@ __all__ = [
     "skewness", "kurtosis",
     "ChainComplex", "CochainComplex", "LongExactSequence", "Ext", "Tor",
     "TopologicalSpace", "Presheaf", "Sheaf", "SheafCohomology", "AffineScheme", "Spec",
+    "SheafOfRings", "SheafOfModules", "Scheme", "SchemeMorphism", "AffineMorphisms",
+    "Site", "GrothendieckTopology", "Coverage", "ClosedSubscheme", "OpenSubscheme",
     "LieAlgebra", "LieSubalgebra", "LieAlgebraRepresentation", "AdjointRepresentation",
     "UniversalEnvelopingAlgebra", "SerreRelations", "RootSystem",
     "sl2_lie_algebra", "gl2_lie_algebra",
@@ -683,4 +743,14 @@ __all__ = [
     "KahlerManifold", "KahlerMetric", "ChernConnection", "FirstChernClass",
     "HolomorphicSection", "ComplexProjectiveSpace", "HermitianEinsteinMetric",
     "CalabiYauManifold", "ComplexSubmanifold", "CohomologyRing", "HolomorphicVectorBundle",
+    "SpectralSequence", "AdamsSpectralSequence", "SerreSpectralSequence", "ExactCouple",
+    "Hypercohomology", "FilteredComplex", "CohomologySpectralSequence", "HomologySpectralSequence",
+    "Topos", "SheafTopos", "BooleanTopos", "AbelianCategory", "Monomorphism", "Epimorphism",
+    "ProjectiveObject", "InjectiveObject", "Generator", "Cogenerator", "ExactFunctor",
+    "LeftExactFunctor", "RightExactFunctor", "Kernel", "Cokernel", "Image", "ExactSequence",
+    "DynkinDiagram", "ClassificationTheorem", "Weight", "HighestWeightVector", "RootSystem",
+    "WeylGroup", "VermaModule", "KostantForm", "SimpleLieAlgebra",
+    "Coalgebra", "Bialgebra", "HopfAlgebra", "GroupAlgebra", "QuantumGroup",
+    "ModuleAlgebra", "InvariantTheory", "RepresentationOfHopfAlgebra",
+    "sl2_hopf", "sl2_quantized", "DualHopfAlgebra", "braided_category",
 ]
