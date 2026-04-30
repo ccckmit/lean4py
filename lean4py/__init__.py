@@ -855,6 +855,50 @@ from lean4py.operator_algebras import (
     IndexTheory,
 )
 
+from lean4py.topology import (
+    TopologicalSpace,
+    MetricSpace,
+    ContinuousFunction,
+    Compactness,
+    Connectedness,
+    HausdorffSpace,
+    OpenMap,
+    ClosedMap,
+)
+
+from lean4py.measure_theory import (
+    SigmaAlgebra,
+    MeasurableSpace,
+    Measure,
+    LebesgueMeasure,
+    MeasurableFunction,
+    SimpleFunction,
+    LebesgueIntegral,
+    ProbabilityMeasure,
+    BorelSigmaAlgebra,
+)
+
+from lean4py.functional_analysis import (
+    NormedSpace,
+    BanachSpace,
+    InnerProductSpace,
+    HilbertSpace,
+    BoundedOperator,
+    DualSpace,
+    OperatorNorm,
+)
+
+from lean4py.combinatorics import (
+    PigeonholePrinciple,
+    CatalanNumber,
+    BellNumber,
+    DyckWord,
+    SetFamily,
+    SpernerTheorem,
+    HallMarriage,
+    BinomialCoefficient,
+)
+
 from lean4py.exceptions import (
     Lean4PyError,
     DimensionError,
@@ -864,7 +908,7 @@ from lean4py.exceptions import (
     ProbabilityError,
 )
 
-__version__ = "1.22.0"
+__version__ = "1.23.0"
 __all__ = [
     "Prop", "Prop_var", "implies", "and_", "or_", "not_", "iff",
     "Theorem", "ProofStep", "assume", "have", "exact", "apply", "rfl", "simp", "prove",
@@ -1032,6 +1076,15 @@ __all__ = [
     "InfinityCategory", "KanComplex", "NCategory",
     "HomotopyPushout", "HomotopyPullback", "SegalCategory", "CompleteSegalSpace",
     "Anima", "InfinityTopos",
-    "K0Group", "K1Group", "K2Group", "KRing", "TopologicalKTheory",
-    "AlgebraicKTheory", "QuillenK", "NilKTheory", "HigherKGroup", "AtiyahHirzebruch",
-]
+     "K0Group", "K1Group", "K2Group", "KRing", "TopologicalKTheory",
+     "AlgebraicKTheory", "QuillenK", "NilKTheory", "HigherKGroup", "AtiyahHirzebruch",
+     "TopologicalSpace", "MetricSpace", "ContinuousFunction", "Compactness",
+     "Connectedness", "HausdorffSpace", "OpenMap", "ClosedMap",
+     "SigmaAlgebra", "MeasurableSpace", "Measure", "LebesgueMeasure",
+     "MeasurableFunction", "SimpleFunction", "LebesgueIntegral", "ProbabilityMeasure",
+     "BorelSigmaAlgebra",
+     "NormedSpace", "BanachSpace", "InnerProductSpace", "HilbertSpace",
+     "BoundedOperator", "DualSpace", "OperatorNorm",
+     "PigeonholePrinciple", "CatalanNumber", "BellNumber", "DyckWord",
+     "SetFamily", "SpernerTheorem", "HallMarriage", "BinomialCoefficient",
+ ]
