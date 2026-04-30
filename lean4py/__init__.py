@@ -696,6 +696,48 @@ from lean4py.topos import (
     PreservesColimits,
 )
 
+from lean4py.differential_geometry import (
+    Manifold,
+    TangentSpace,
+    TangentBundle,
+    VectorField,
+    Connection,
+    RiemannianMetric,
+    Geodesic,
+    LeviCivitaConnection,
+    CurvatureTensor,
+    RiemannianManifold,
+    Submanifold,
+)
+
+from lean4py.two_category import (
+    TwoCategory,
+    Cat,
+    DoubleCategory,
+    Bicategory,
+    TwoMorphism,
+    AdjunctionIn2Category,
+    KanExtension2Category,
+    LaxFunctor,
+    Strict2Category,
+    FunctorCategory,
+)
+
+from lean4py.automata_theory import (
+    DFA,
+    NFA,
+    RegularExpression,
+    PushdownAutomaton,
+    TuringMachine,
+    Grammar,
+    ChomskyHierarchy,
+    PumpingLemma,
+    KleeneStar,
+    MealyMachine,
+    MooreMachine,
+    FSM,
+)
+
 from lean4py.operator_algebras import (
     NormedSpace,
     HilbertSpace,
@@ -719,7 +761,7 @@ from lean4py.exceptions import (
     ProbabilityError,
 )
 
-__version__ = "1.19.0"
+__version__ = "1.20.0"
 __all__ = [
     "Prop", "Prop_var", "implies", "and_", "or_", "not_", "iff",
     "Theorem", "ProofStep", "assume", "have", "exact", "apply", "rfl", "simp", "prove",
@@ -857,4 +899,13 @@ __all__ = [
     "Limit", "Colimit", "Product", "Coproduct", "Pullback", "Pushout",
     "Equalizer", "Coequalizer", "TerminalObject", "InitialObject",
     "ZeroObject", "KanExtension", "PreservesLimits", "PreservesColimits",
+    "Manifold", "TangentSpace", "TangentBundle", "VectorField", "Connection",
+    "RiemannianMetric", "Geodesic", "LeviCivitaConnection", "CurvatureTensor",
+    "RiemannianManifold", "Submanifold",
+    "TwoCategory", "Cat", "DoubleCategory", "Bicategory", "TwoMorphism",
+    "AdjunctionIn2Category", "KanExtension2Category", "LaxFunctor",
+    "Strict2Category", "FunctorCategory",
+    "DFA", "NFA", "RegularExpression", "PushdownAutomaton", "TuringMachine",
+    "Grammar", "ChomskyHierarchy", "PumpingLemma", "KleeneStar",
+    "MealyMachine", "MooreMachine", "FSM",
 ]

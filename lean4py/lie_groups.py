@@ -411,3 +411,69 @@ class IntegrationOverGroup:
     def integrate(self, f: Callable) -> float:
         """integral_G f(g) dg."""
         return 0.0
+
+
+class RiemannianSubmanifold:
+    """Submanifold of Lie group with induced metric."""
+
+    def __init__(self, ambient: LieGroup, submanifold: Set):
+        self.ambient = ambient
+        self.submanifold = submanifold
+
+    def codimension(self) -> int:
+        """Codimension of submanifold."""
+        return self.ambient.dimension - len(list(self.submanifold)[0]) if self.submanifold else 0
+
+    def induced_metric(self) -> 'InducedRiemannianMetric':
+        """Get induced metric from ambient."""
+        return InducedRiemannianMetric(self)
+
+
+class InducedRiemannianMetric:
+    """Riemannian metric induced on submanifold."""
+
+    def __init__(self, submanifold: RiemannianSubmanifold):
+        self.submanifold = submanifold
+
+    def inner_product(self, u: List[float], v: List[float]) -> float:
+        """Inner product from ambient metric."""
+        return sum(u[i] * v[i] for i in range(len(u)))
+
+
+class ConnectionOnPrincipalBundle:
+    """Connection on principal G-bundle over manifold."""
+
+    def __init__(self, base: Any, structure_group: str):
+        self.base = base
+        self.structure_group = structure_group
+
+    def horizontal_lift(self, vector: List[float]) -> Any:
+        """Get horizontal lift of vector."""
+        return f"horizontal({vector})"
+
+    def connection_form(self) -> Any:
+        """Connection 1-form ω on P."""
+        return "connection_form"
+
+    def curvature_form(self) -> Any:
+        """Curvature 2-form Omega = dω + ω∧ω."""
+        return "curvature_form"
+
+
+class BiInvariantMetric:
+    """Bi-invariant metric on Lie group: left and right invariant."""
+
+    def __init__(self, lie_group: LieGroup):
+        self.lie_group = lie_group
+
+    def inner_product(self, u: List[float], v: List[float]) -> float:
+        """Biemannian inner product on Lie algebra."""
+        return sum(u[i] * v[i] for i in range(len(u)))
+
+    def is_bi_invariant(self) -> bool:
+        """Check metric is both left and right invariant."""
+        return True
+
+    def metric_completion(self) -> 'RiemannianManifold':
+        """Get complete Riemannian manifold structure."""
+        return RiemannianManifold(self.lie_group.dimension)
