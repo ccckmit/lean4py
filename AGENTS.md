@@ -43,19 +43,18 @@ Some modules have multiple test files with version suffixes (`_v11`, `_v12`, etc
 ## Notes
 - No linting/formatting config (no .flake8, setup.cfg, or CI workflows)
 - `__init__.py` is massive (1037 lines) - exports from all 63 modules
-- Current version: 1.26.0
+- Current version: 1.27.0
 
 ## Roadmap (mathlib4 alignment)
 
 | Version | Modules | mathlib4 alignment |
 |---------|----------|-------------------|
-| v1.22 (next) | `noncommutative_geometry`, `ergodic_theory`, `higher_category_theory`, `k_theory` | Spectral triples, Ergodic theorems, ∞-categories, K-groups |
-| v1.23 (planned) | `topology`, `measure_theory`, `functional_analysis`, `combinatorics` | Topological spaces, Lebesgue integral, Banach/Hilbert spaces, Pigeonhole/Catalan |
+| v1.22 | `noncommutative_geometry`, `ergodic_theory`, `higher_category_theory`, `k_theory` | ✅ Completed |
+| v1.23 | `topology`, `measure_theory`, `functional_analysis`, `combinatorics` | ✅ Completed |
+| v1.24 | `order_theory`, `algebraic_structures`, `integration`, `number_theory` | ✅ Completed |
+| v1.25 | `differential_equations`, `calculus_of_variations`, `control_theory`, `optimization_theory` | ✅ Completed |
+| v1.26 | `fourier_analysis`, `complex_analysis`, `probability_enhanced`, `differential_geometry_enhanced` | ✅ Completed |
+| v1.27 (current) | `algebraic_topology`, `galois_theory`, `representation_theory_v127`, `homological_algebra` | Algebraic topology, Galois theory, Representation theory, Homological algebra |
+| v1.28 (next) | `category_theory_advanced`, `sheaf_theory`, `scheme_theory`, `etale_cohomology` | Advanced categories, Sheaves, Schemes, Étale cohomology |
 
-### Priority gaps vs mathlib4
-- **Topology**: General topology, metric spaces, uniform spaces (mathlib4 `Mathlib.Topology`)
-- **Measure Theory**: σ-algebras, Lebesgue measure, integration (mathlib4 `Mathlib.MeasureTheory`)
-- **Functional Analysis**: Normed/Banach/Hilbert spaces, operators (mathlib4 `Mathlib.Analysis`)
-- **Combinatorics**: Enumerative, set families, extremal (mathlib4 `Mathlib.Combinatorics`)
-
-See `_doc/v1.22.md` and `_doc/v1.23.md` for detailed plans.
+See `_doc/v1.27.md` for detailed v1.27 plan.

@@ -47,8 +47,8 @@ class DerivedCategory(Generic[T]):
         return True
 
     def shift(self, obj: ChainComplex, n: int) -> ChainComplex:
-        """Shift functor [n]."""
-        return ChainComplex(obj.modules.copy(), obj.differentials.copy() if obj.differentials else [])
+        """Shift functor [n] (simplified: return original)."""
+        return obj
 
 
 class Hot(Generic[T]):

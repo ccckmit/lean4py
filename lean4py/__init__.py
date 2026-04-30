@@ -973,7 +973,7 @@ from lean4py.exceptions import (
     ProbabilityError,
 )
 
-__version__ = "1.26.0"
+__version__ = "1.27.0"
 __all__ = [
     "Prop", "Prop_var", "implies", "and_", "or_", "not_", "iff",
     "Theorem", "ProofStep", "assume", "have", "exact", "apply", "rfl", "simp", "prove",
@@ -1175,8 +1175,19 @@ __all__ = [
     "Martingale", "StoppingTime", "OptionalStoppingTheorem",
     "CentralLimitTheorem", "LawOfLargeNumbers",
     "CharacteristicFunction", "StochasticProcess",
-    "GeodesicEquation", "SectionalCurvature", "RicciCurvature",
-    "GaussBonnet",
+     "GeodesicEquation", "SectionalCurvature", "RicciCurvature",
+     "GaussBonnet",
+     "FundamentalGroup", "Homotopy", "SimplicialComplex",
+     "CWComplex", "Homology", "BettiNumber",
+     "FieldExtension", "GaloisGroup", "SeparableExtension",
+     "NormalExtension", "GaloisExtension", "FundamentalTheorem",
+     "SolvabilityByRadicals",
+     "Representation", "Character", "IrreducibleRepresentation",
+     "MaschkeTheorem", "SchurLemma", "Decomposition", "TensorProductRepresentations",
+     "ChainComplex", "BoundaryMap", "CycleGroup",
+     "BoundaryGroup", "HomologyGroup", "ExactSequence",
+     "FiveLemma", "CochainComplex", "LongExactSequence",
+     "Ext", "Tor",
 ]
 from lean4py.fourier_analysis import (
     FourierTransform,
@@ -1214,4 +1225,46 @@ from lean4py.differential_geometry_enhanced import (
     SectionalCurvature,
     RicciCurvature,
     GaussBonnet,
+)
+
+from lean4py.algebraic_topology import (
+    FundamentalGroup,
+    Homotopy,
+    SimplicialComplex,
+    CWComplex,
+    Homology,
+    BettiNumber,
+)
+
+from lean4py.galois_theory import (
+    FieldExtension,
+    GaloisGroup,
+    SeparableExtension,
+    NormalExtension,
+    GaloisExtension,
+    FundamentalTheorem,
+    SolvabilityByRadicals,
+)
+
+from lean4py.representation_theory_v127 import (
+    Representation,
+    Character,
+    IrreducibleRepresentation,
+    MaschkeTheorem,
+    SchurLemma,
+    Decomposition,
+)
+
+from lean4py.homological_algebra import (
+    ChainComplex,
+    BoundaryMap,
+    CycleGroup,
+    BoundaryGroup,
+    HomologyGroup,
+    ExactSequence,
+    FiveLemma,
+    CochainComplex,
+    LongExactSequence,
+    Ext,
+    Tor,
 )

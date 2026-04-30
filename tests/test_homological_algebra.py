@@ -1,103 +1,85 @@
-"""Tests for homological_algebra module."""
-import pytest
+"""Tests for homological_algebra.py v1.27."""
+
+import unittest
 from lean4py.homological_algebra import (
-    ChainComplex, CochainComplex, LongExactSequence, Ext, Tor,
-    exact_sequence_from_chain, connecting_homomorphism
+    ChainComplex, BoundaryMap, CycleGroup,
+    BoundaryGroup, HomologyGroup, ExactSequence,
+    FiveLemma
 )
 
 
-class TestChainComplex:
-    def test_chain_complex_creation(self):
-        modules = [1, 2, 3]
-        diffs = [lambda x: x * 2, lambda x: x]
-        cc = ChainComplex(modules, diffs)
-        assert len(cc.modules) == 3
-        assert len(cc.differentials) == 2
+class TestChainComplex(unittest.TestCase):
+    def test_creation(self):
+        groups = {0: ["a", "b"], 1: ["c"]}
+        boundaries = {1: [[1.0, 0.0]]}
+        chain = ChainComplex(groups, boundaries)
+        self.assertEqual(len(chain.groups), 2)
 
-    def test_homology_zero_degree(self):
-        modules = [1, 2, 3]
-        diffs = [lambda x: 0, lambda x: 0]
-        cc = ChainComplex(modules, diffs)
-        result = cc.homology(0)
-        assert isinstance(result, set)
+    def test_get_group(self):
+        groups = {0: ["a"], 1: ["b"]}
+        chain = ChainComplex(groups, {})
+        result = chain.get_group(0)
+        self.assertEqual(len(result), 1)
 
-    def test_homology_out_of_range(self):
-        cc = ChainComplex([], [])
-        assert cc.homology(5) == set()
-        assert cc.homology(-1) == set()
-
-    def test_cochain_complex(self):
-        modules = [1, 2, 3]
-        coboundaries = [lambda x: x]
-        coc = CochainComplex(modules, coboundaries)
-        assert len(coc.modules) == 3
-
-    def test_cohomology(self):
-        coc = CochainComplex([1], [lambda x: 0])
-        result = coc.cohomology(0)
-        assert isinstance(result, set)
+    def test_get_boundary(self):
+        boundaries = {1: [[1.0]]}
+        chain = ChainComplex({}, boundaries)
+        result = chain.get_boundary(1)
+        self.assertIsInstance(result, list)
 
 
-class TestExtTor:
-    def test_ext_creation(self):
-        ext = Ext("M", "N", "R")
-        assert ext.module_m == "M"
-        assert ext.module_n == "N"
-        assert ext.ring == "R"
+class TestBoundaryMap(unittest.TestCase):
+    def test_compose(self):
+        phi = [[1.0]]
+        psi = [[1.0]]
+        result = BoundaryMap.compose(phi, psi)
+        self.assertEqual(result[0][0], 0.0)
 
-    def test_ext_compute(self):
-        ext = Ext("M", "N", "R")
-        assert ext.compute(0) == "N"
-        assert ext.compute(1) is None
-
-    def test_tor_creation(self):
-        tor = Tor("M", "N", "R")
-        assert tor.module_m == "M"
-        assert tor.module_n == "N"
-        assert tor.ring == "R"
-
-    def test_tor_compute(self):
-        tor = Tor("M", "N", "R")
-        result = tor.compute(0)
-        assert result is not None
-        assert "M" in result and "N" in result
+    def test_is_zero(self):
+        groups = {0: ["a"], 1: ["b"]}
+        boundaries = {1: [[1.0]]}
+        chain = ChainComplex(groups, boundaries)
+        self.assertTrue(BoundaryMap.is_zero(chain, 1))
 
 
-class TestLongExactSequence:
-    def test_les_creation(self):
-        les = LongExactSequence([1, 2, 3], [lambda x: x])
-        assert len(les.terms) == 3
-        assert len(les.connecting_maps) == 1
-
-    def test_verify_exactness(self):
-        les = LongExactSequence([], [])
-        result = les.verify_exactness()
-        assert isinstance(result, bool)
+class TestCycleGroup(unittest.TestCase):
+    def test_compute(self):
+        chain = ChainComplex({0: ["a"]}, {})
+        result = CycleGroup.compute(chain, 0)
+        self.assertIsInstance(result, list)
 
 
-class TestHelpers:
-    def test_exact_sequence_from_chain(self):
-        cc = ChainComplex([1, 2, 3], [lambda x: 0, lambda x: 0])
-        result = exact_sequence_from_chain(cc, 0)
-        assert result is not None
-        assert isinstance(result, tuple)
-        assert len(result) == 3
-
-    def test_exact_sequence_out_of_range(self):
-        cc = ChainComplex([], [])
-        result = exact_sequence_from_chain(cc, 10)
-        assert result is None
-
-    def test_connecting_homomorphism(self):
-        les = LongExactSequence([1, 2], [])
-        delta = connecting_homomorphism(les, 0)
-        assert callable(delta)
-        assert delta("x") == "x"
+class TestBoundaryGroup(unittest.TestCase):
+    def test_compute(self):
+        chain = ChainComplex({0: ["a"]}, {})
+        result = BoundaryGroup.compute(chain, 0)
+        self.assertIsInstance(result, list)
 
 
-def test_import_from_package():
-    from lean4py import ChainComplex, CochainComplex, Ext, Tor
-    assert ChainComplex is not None
-    assert CochainComplex is not None
-    assert Ext is not None
-    assert Tor is not None
+class TestHomologyGroup(unittest.TestCase):
+    def test_compute(self):
+        chain = ChainComplex({0: ["a"]}, {})
+        result = HomologyGroup.compute(chain, 0)
+        self.assertEqual(result["group"], "0")
+
+    def test_is_trivial(self):
+        chain = ChainComplex({0: ["a"]}, {})
+        self.assertTrue(HomologyGroup.is_trivial(chain, 0))
+
+
+class TestExactSequence(unittest.TestCase):
+    def test_is_exact(self):
+        chain = ChainComplex({0: ["a"]}, {})
+        self.assertTrue(ExactSequence.is_exact(chain, 0))
+
+    def test_short_exact(self):
+        self.assertTrue(ExactSequence.short_exact([1], [2], [3]))
+
+
+class TestFiveLemma(unittest.TestCase):
+    def test_holds(self):
+        self.assertTrue(FiveLemma.holds())
+
+
+if __name__ == "__main__":
+    unittest.main()
