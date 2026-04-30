@@ -973,7 +973,7 @@ from lean4py.exceptions import (
     ProbabilityError,
 )
 
-__version__ = "1.27.0"
+__version__ = "1.29.0"
 __all__ = [
     "Prop", "Prop_var", "implies", "and_", "or_", "not_", "iff",
     "Theorem", "ProofStep", "assume", "have", "exact", "apply", "rfl", "simp", "prove",
@@ -1188,6 +1188,23 @@ __all__ = [
      "BoundaryGroup", "HomologyGroup", "ExactSequence",
      "FiveLemma", "CochainComplex", "LongExactSequence",
      "Ext", "Tor",
+     "AdjointFunctor", "Limit", "Colimit", "YonedaLemma",
+     "Monad", "Comonad",
+     "Presheaf", "Sheaf", "Sheafification",
+     "GrothendieckTopology", "SheafCohomology",
+     "AffineScheme", "ProjectiveScheme", "SchemeMorphism",
+     "FiberProduct", "ProperMorphism",
+     "EtaleSite", "EtaleCohomologyGroup",
+     "BaseChange", "WeilConjectures",
+     "ModularForm", "Weight", "HeckeOperator",
+     "ModularCurve", "CuspForm",
+     "EllipticCurve", "GroupLaw", "TorsionPoint",
+     "Rank", "Isogeny",
+     "AbelianExtension", "ArtinMap", "ReciprocityLaw",
+     "IdelesClassGroup", "HilbertClassField",
+     "RiemannZeta", "DirichletLFunction",
+     "FunctionalEquation", "AnalyticContinuation",
+     "EulerProduct",
 ]
 from lean4py.fourier_analysis import (
     FourierTransform,
@@ -1267,4 +1284,68 @@ from lean4py.homological_algebra import (
     LongExactSequence,
     Ext,
     Tor,
+)
+
+from lean4py.category_theory_advanced import (
+    AdjointFunctor,
+    Limit,
+    Colimit,
+    YonedaLemma,
+    Monad,
+    Comonad,
+)
+
+from lean4py.sheaf_theory import (
+    Presheaf,
+    Sheaf,
+    Sheafification,
+    GrothendieckTopology,
+    SheafCohomology,
+)
+
+from lean4py.scheme_theory import (
+    AffineScheme,
+    ProjectiveScheme,
+    SchemeMorphism,
+    FiberProduct,
+    ProperMorphism,
+)
+
+from lean4py.etale_cohomology import (
+    EtaleSite,
+    EtaleCohomologyGroup,
+    BaseChange,
+    WeilConjectures,
+)
+
+from lean4py.modular_forms import (
+    ModularForm,
+    Weight,
+    HeckeOperator,
+    ModularCurve,
+    CuspForm,
+)
+
+from lean4py.elliptic_curves import (
+    EllipticCurve,
+    GroupLaw,
+    TorsionPoint,
+    Rank,
+    Isogeny,
+)
+
+from lean4py.class_field_theory import (
+    AbelianExtension,
+    ArtinMap,
+    ReciprocityLaw,
+    IdeleClassGroup,
+    HilbertClassField,
+)
+
+from lean4py.l_functions import (
+    RiemannZeta,
+    DirichletLFunction,
+    FunctionalEquation,
+    AnalyticContinuation,
+    EulerProduct,
 )
