@@ -928,6 +928,42 @@ from lean4py.integration import (
     MinkowskiInequality,
 )
 
+from lean4py.differential_equations import (
+    ODEProblem,
+    LipschitzCondition,
+    PicardLindelof,
+    FlowProperty,
+    PhasePortrait,
+    StabilityAnalysis,
+)
+
+from lean4py.calculus_of_variations import (
+    Functional,
+    EulerLagrangeEquation,
+    HamiltonPrinciple,
+    Brachistochrone,
+    IsoperimetricProblem,
+    NoetherTheorem,
+)
+
+from lean4py.control_theory import (
+    LyapunovStability,
+    StateSpaceRepresentation,
+    Controllability,
+    Observability,
+    OptimalControl,
+    KalmanFilter,
+)
+
+from lean4py.optimization_theory import (
+    ConvexSet,
+    ConvexFunction,
+    LagrangeMultiplier,
+    KKTConditions,
+    Duality,
+    SlaterCondition,
+)
+
 from lean4py.exceptions import (
     Lean4PyError,
     DimensionError,
@@ -937,7 +973,7 @@ from lean4py.exceptions import (
     ProbabilityError,
 )
 
-__version__ = "1.24.0"
+__version__ = "1.25.0"
 __all__ = [
     "Prop", "Prop_var", "implies", "and_", "or_", "not_", "iff",
     "Theorem", "ProofStep", "assume", "have", "exact", "apply", "rfl", "simp", "prove",
@@ -1116,4 +1152,18 @@ __all__ = [
      "BoundedOperator", "DualSpace", "OperatorNorm",
      "PigeonholePrinciple", "CatalanNumber", "BellNumber", "DyckWord",
      "SetFamily", "SpernerTheorem", "HallMarriage", "BinomialCoefficient",
+     "PartialOrder", "TotalOrder", "Lattice", "CompleteLattice",
+     "HeytingAlgebra", "BooleanAlgebra", "GaloisConnection",
+     "Module", "Algebra", "TensorProduct", "ExactSequence",
+     "FreeModule", "SimpleModule",
+     "BochnerIntegral", "FubiniTheorem", "ChangeOfVariables",
+     "Convolution", "LpSpace", "HolderInequality", "MinkowskiInequality",
+     "ODEProblem", "LipschitzCondition", "PicardLindelof",
+     "FlowProperty", "PhasePortrait", "StabilityAnalysis",
+     "Functional", "EulerLagrangeEquation", "HamiltonPrinciple",
+     "Brachistochrone", "IsoperimetricProblem", "NoetherTheorem",
+     "LyapunovStability", "StateSpaceRepresentation",
+     "Controllability", "Observability", "OptimalControl", "KalmanFilter",
+     "ConvexSet", "ConvexFunction", "LagrangeMultiplier",
+     "KKTConditions", "Duality", "SlaterCondition",
  ]

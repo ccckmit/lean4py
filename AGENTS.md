@@ -43,7 +43,7 @@ Some modules have multiple test files with version suffixes (`_v11`, `_v12`, etc
 ## Notes
 - No linting/formatting config (no .flake8, setup.cfg, or CI workflows)
 - `__init__.py` is massive (1037 lines) - exports from all 63 modules
-- Current version: 1.24.0
+- Current version: 1.25.0
 
 ## Roadmap (mathlib4 alignment)
 
