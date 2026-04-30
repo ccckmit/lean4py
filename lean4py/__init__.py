@@ -738,6 +738,58 @@ from lean4py.automata_theory import (
     FSM,
 )
 
+from lean4py.monoidal_categories import (
+    MonoidalCategory,
+    SymmetricMonoidalCategory,
+    ClosedMonoidalCategory,
+    BraidedMonoidalCategory,
+    RigidCategory,
+    TensorProduct,
+    DualObject,
+    EnrichedCategory,
+    CoCartesianMonoidalCategory,
+    CartesianMonoidalCategory,
+    MonoidalFunctor,
+    LaxMonoidalFunctor,
+)
+
+from lean4py.groebner_basis import (
+    MonomialOrder,
+    Polynomial,
+    PolynomialRing,
+    GroebnerBasis,
+    BuchbergerAlgorithm,
+    PolynomialIdeal,
+    EliminationIdeal,
+    IdealOperations,
+)
+
+from lean4py.symplectic_geometry import (
+    SymplecticManifold,
+    SymplecticForm,
+    HamiltonianVectorField,
+    PoissonBracket,
+    MomentMap,
+    Symplectomorphism,
+    LagrangianSubmanifold,
+    HamiltonianSystem,
+    DarbouxCoordinates,
+    ContactManifold,
+    ReebVectorField,
+)
+
+from lean4py.markov_chains import (
+    DiscreteTimeMarkovChain,
+    ContinuousTimeMarkovChain,
+    TransitionMatrix,
+    StationaryDistribution,
+    DetailedBalance,
+    AbsorbingStates,
+    MarkovChainMonteCarlo,
+    HittingProbability,
+    MixingTime,
+)
+
 from lean4py.operator_algebras import (
     NormedSpace,
     HilbertSpace,
@@ -761,7 +813,7 @@ from lean4py.exceptions import (
     ProbabilityError,
 )
 
-__version__ = "1.20.0"
+__version__ = "1.21.0"
 __all__ = [
     "Prop", "Prop_var", "implies", "and_", "or_", "not_", "iff",
     "Theorem", "ProofStep", "assume", "have", "exact", "apply", "rfl", "simp", "prove",
@@ -908,4 +960,16 @@ __all__ = [
     "DFA", "NFA", "RegularExpression", "PushdownAutomaton", "TuringMachine",
     "Grammar", "ChomskyHierarchy", "PumpingLemma", "KleeneStar",
     "MealyMachine", "MooreMachine", "FSM",
+    "MonoidalCategory", "SymmetricMonoidalCategory", "ClosedMonoidalCategory",
+    "BraidedMonoidalCategory", "RigidCategory", "TensorProduct", "DualObject",
+    "EnrichedCategory", "CoCartesianMonoidalCategory", "CartesianMonoidalCategory",
+    "MonoidalFunctor", "LaxMonoidalFunctor",
+    "MonomialOrder", "Polynomial", "PolynomialRing", "GroebnerBasis",
+    "BuchbergerAlgorithm", "PolynomialIdeal", "EliminationIdeal", "IdealOperations",
+    "SymplecticManifold", "SymplecticForm", "HamiltonianVectorField", "PoissonBracket",
+    "MomentMap", "Symplectomorphism", "LagrangianSubmanifold", "HamiltonianSystem",
+    "DarbouxCoordinates", "ContactManifold", "ReebVectorField",
+    "DiscreteTimeMarkovChain", "ContinuousTimeMarkovChain", "TransitionMatrix",
+    "StationaryDistribution", "DetailedBalance", "AbsorbingStates",
+    "MarkovChainMonteCarlo", "HittingProbability", "MixingTime",
 ]
