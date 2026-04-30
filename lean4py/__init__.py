@@ -899,6 +899,35 @@ from lean4py.combinatorics import (
     BinomialCoefficient,
 )
 
+from lean4py.order_theory import (
+    PartialOrder,
+    TotalOrder,
+    Lattice,
+    CompleteLattice,
+    HeytingAlgebra,
+    BooleanAlgebra,
+    GaloisConnection,
+)
+
+from lean4py.algebraic_structures import (
+    Module,
+    Algebra,
+    TensorProduct,
+    ExactSequence,
+    FreeModule,
+    SimpleModule,
+)
+
+from lean4py.integration import (
+    BochnerIntegral,
+    FubiniTheorem,
+    ChangeOfVariables,
+    Convolution,
+    LpSpace,
+    HolderInequality,
+    MinkowskiInequality,
+)
+
 from lean4py.exceptions import (
     Lean4PyError,
     DimensionError,
@@ -908,7 +937,7 @@ from lean4py.exceptions import (
     ProbabilityError,
 )
 
-__version__ = "1.23.0"
+__version__ = "1.24.0"
 __all__ = [
     "Prop", "Prop_var", "implies", "and_", "or_", "not_", "iff",
     "Theorem", "ProofStep", "assume", "have", "exact", "apply", "rfl", "simp", "prove",
