@@ -973,7 +973,7 @@ from lean4py.exceptions import (
     ProbabilityError,
 )
 
-__version__ = "1.25.0"
+__version__ = "1.26.0"
 __all__ = [
     "Prop", "Prop_var", "implies", "and_", "or_", "not_", "iff",
     "Theorem", "ProofStep", "assume", "have", "exact", "apply", "rfl", "simp", "prove",
@@ -1165,5 +1165,53 @@ __all__ = [
      "LyapunovStability", "StateSpaceRepresentation",
      "Controllability", "Observability", "OptimalControl", "KalmanFilter",
      "ConvexSet", "ConvexFunction", "LagrangeMultiplier",
-     "KKTConditions", "Duality", "SlaterCondition",
- ]
+      "KKTConditions", "Duality", "SlaterCondition",
+     "FourierTransform", "InverseFourierTransform", "FourierSeries",
+    "Convolution", "PlancherelTheorem", "RiemannLebesgueLemma",
+    "PoissonSummation",
+    "ComplexFunction", "CauchyRiemann", "CauchyIntegralFormula",
+    "LiouvilleTheorem", "MaximumModulusPrinciple", "ResidueTheorem",
+    "LaurentSeries", "ArgumentPrinciple",
+    "Martingale", "StoppingTime", "OptionalStoppingTheorem",
+    "CentralLimitTheorem", "LawOfLargeNumbers",
+    "CharacteristicFunction", "StochasticProcess",
+    "GeodesicEquation", "SectionalCurvature", "RicciCurvature",
+    "GaussBonnet",
+]
+from lean4py.fourier_analysis import (
+    FourierTransform,
+    InverseFourierTransform,
+    FourierSeries,
+    Convolution,
+    PlancherelTheorem,
+    RiemannLebesgueLemma,
+    PoissonSummation,
+)
+
+from lean4py.complex_analysis import (
+    ComplexFunction,
+    CauchyRiemann,
+    CauchyIntegralFormula,
+    LiouvilleTheorem,
+    MaximumModulusPrinciple,
+    ResidueTheorem,
+    LaurentSeries,
+    ArgumentPrinciple,
+)
+
+from lean4py.probability_enhanced import (
+    Martingale,
+    StoppingTime,
+    OptionalStoppingTheorem,
+    CentralLimitTheorem,
+    LawOfLargeNumbers,
+    CharacteristicFunction,
+    StochasticProcess,
+)
+
+from lean4py.differential_geometry_enhanced import (
+    GeodesicEquation,
+    SectionalCurvature,
+    RicciCurvature,
+    GaussBonnet,
+)
