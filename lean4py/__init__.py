@@ -790,6 +790,57 @@ from lean4py.markov_chains import (
     MixingTime,
 )
 
+from lean4py.noncommutative_geometry import (
+    NoncommutativeSpace,
+    SpectralTriple,
+    DiracOperator,
+    FredholmIndex,
+    HochschildCohomology,
+    CyclicCohomology,
+    KHomology,
+    FredholmModule,
+    PseudodifferentialOperator,
+    ConnesChernCharacter,
+)
+
+from lean4py.ergodic_theory import (
+    ErgodicTransformation,
+    MeasurePreservingMap,
+    ErgodicTheorem,
+    MixingTransformation,
+    KolmogorovSinaiEntropy,
+    BernoulliShift,
+    PoincareRecurrence,
+    InvariantMeasure,
+    ErgodicDecomposition,
+)
+
+from lean4py.higher_category_theory import (
+    InfinityCategory,
+    KanComplex,
+    NCategory,
+    WeakEquivalence,
+    HomotopyPushout,
+    HomotopyPullback,
+    SegalCategory,
+    CompleteSegalSpace,
+    Anima,
+    InfinityTopos,
+)
+
+from lean4py.k_theory import (
+    K0Group,
+    K1Group,
+    K2Group,
+    KRing,
+    TopologicalKTheory,
+    AlgebraicKTheory,
+    QuillenK,
+    NilKTheory,
+    HigherKGroup,
+    AtiyahHirzebruch,
+)
+
 from lean4py.operator_algebras import (
     NormedSpace,
     HilbertSpace,
@@ -813,7 +864,7 @@ from lean4py.exceptions import (
     ProbabilityError,
 )
 
-__version__ = "1.21.0"
+__version__ = "1.22.0"
 __all__ = [
     "Prop", "Prop_var", "implies", "and_", "or_", "not_", "iff",
     "Theorem", "ProofStep", "assume", "have", "exact", "apply", "rfl", "simp", "prove",
@@ -972,4 +1023,15 @@ __all__ = [
     "DiscreteTimeMarkovChain", "ContinuousTimeMarkovChain", "TransitionMatrix",
     "StationaryDistribution", "DetailedBalance", "AbsorbingStates",
     "MarkovChainMonteCarlo", "HittingProbability", "MixingTime",
+    "NoncommutativeSpace", "SpectralTriple", "DiracOperator", "FredholmIndex",
+    "HochschildCohomology", "CyclicCohomology", "KHomology", "FredholmModule",
+    "PseudodifferentialOperator", "ConnesChernCharacter",
+    "ErgodicTransformation", "MeasurePreservingMap", "ErgodicTheorem",
+    "MixingTransformation", "KolmogorovSinaiEntropy", "BernoulliShift",
+    "PoincareRecurrence", "InvariantMeasure", "ErgodicDecomposition",
+    "InfinityCategory", "KanComplex", "NCategory",
+    "HomotopyPushout", "HomotopyPullback", "SegalCategory", "CompleteSegalSpace",
+    "Anima", "InfinityTopos",
+    "K0Group", "K1Group", "K2Group", "KRing", "TopologicalKTheory",
+    "AlgebraicKTheory", "QuillenK", "NilKTheory", "HigherKGroup", "AtiyahHirzebruch",
 ]
