@@ -163,19 +163,19 @@ class TestPosteriorUpdateBetaBinomial:
 
 class TestMetropolisHastings:
     """Tests for MCMC sampling."""
-    
+
     def test_sample_normal_target(self):
         """Test sampling from a normal-like target."""
         # Target: log N(0, 1)
         def log_target(x):
             return -0.5 * x**2
-        
+
         samples = metropolis_hastings(
-            log_target, initial=0.0, 
-            n_samples=1000, proposal_std=1.0
+            log_target, initial=0.0,
+            n_samples=5000, proposal_std=1.0
         )
-        
-        assert len(samples) == 1000
+
+        assert len(samples) == 5000
         # Mean should be close to 0
         sample_mean = sum(samples) / len(samples)
         assert abs(sample_mean) < 0.2

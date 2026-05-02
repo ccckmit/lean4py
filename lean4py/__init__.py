@@ -973,7 +973,7 @@ from lean4py.exceptions import (
     ProbabilityError,
 )
 
-__version__ = "1.29.0"
+__version__ = "1.34.0"
 __all__ = [
     "Prop", "Prop_var", "implies", "and_", "or_", "not_", "iff",
     "Theorem", "ProofStep", "assume", "have", "exact", "apply", "rfl", "simp", "prove",
@@ -1205,6 +1205,43 @@ __all__ = [
      "RiemannZeta", "DirichletLFunction",
      "FunctionalEquation", "AnalyticContinuation",
      "EulerProduct",
+     "PadicNumber", "PadicValuation", "HenselLemma",
+     "PadicAbsoluteValue",
+     "LocalField", "ValuationRing", "Uniformizer",
+     "RamificationIndex", "InertiaDegree",
+     "AdeleRing", "FiniteAdeles", "InfiniteAdeles",
+     "RestrictedProduct",
+     "DedekindZetaFunction", "EulerProduct",
+     "AnalyticClassNumber", "FunctionalEquation",
+     "Divisor", "LineBundle", "RiemannRoch",
+     "Genus", "CanonicalDivisor",
+     "AutomorphicForm", "HeckeOperatorGeneral",
+     "LanglandsFunctoriality", "LFunction",
+     "GaloisRepresentation", "LAdicRepresentation",
+     "WeilDeligneRepresentation", "FontaineTheory",
+     "ArithmeticScheme", "NeronModel",
+     "ArakelovGeometry", "MordellWeil",
+     "Localization", "PrimaryDecomposition", "NoetherianRing",
+     "IntegralClosure", "DedekindDomain",
+     "SpectralSequence", "DerivedFunctorAdvanced",
+     "ExtTorAdvanced", "Hypercohomology",
+     "FundamentalGroupoid", "CoveringSpace",
+     "HomotopyGroup", "CellComplex", "EilenbergMacLane",
+     "Connection", "Curvature", "GeodesicAdvanced",
+     "Holonomy", "CharacteristicClass",
+     "Ordinal", "Cardinal", "TransfiniteInduction",
+     "WellOrdering", "AxiomOfChoice",
+     "Structure", "TypeSpace", "CompactnessTheorem",
+     "LowenheimSkolem", "ElementaryExtension",
+     "Sequent", "CutElimination", "Consistency",
+     "Normalization",
+     "MartinLofType", "IdentityType",
+     "UniversePolymorphism", "HeterogenousEquality",
+     "RegularLanguage", "ContextFreeGrammar",
+     "ChomskyHierarchy", "PumpingLemma",
+     "DFA", "NFA", "PushdownAutomaton", "TuringMachine",
+     "ComplexityClass", "NPCompleteness", "Reduction", "CookLevin",
+     "LambdaTerm", "BetaReduction", "SimplyTypedLambda", "ChurchNumerals",
 ]
 from lean4py.fourier_analysis import (
     FourierTransform,
@@ -1348,4 +1385,151 @@ from lean4py.l_functions import (
     FunctionalEquation,
     AnalyticContinuation,
     EulerProduct,
+)
+
+from lean4py.p_adic_numbers import (
+    PadicNumber,
+    PadicValuation,
+    HenselLemma,
+    PadicAbsoluteValue,
+)
+
+from lean4py.local_fields import (
+    LocalField,
+    ValuationRing,
+    Uniformizer,
+    RamificationIndex,
+    InertiaDegree,
+)
+
+from lean4py.adeles import (
+    AdeleRing,
+    FiniteAdeles,
+    InfiniteAdeles,
+    RestrictedProduct,
+)
+
+from lean4py.dedekind_zeta import (
+    DedekindZetaFunction,
+    EulerProduct,
+    AnalyticClassNumber,
+    FunctionalEquation,
+)
+
+from lean4py.algebraic_geometry_advanced import (
+    Divisor,
+    LineBundle,
+    RiemannRoch,
+    Genus,
+    CanonicalDivisor,
+)
+
+from lean4py.automorphic_forms import (
+    AutomorphicForm,
+    HeckeOperatorGeneral,
+    LanglandsFunctioriality,
+    LFunction,
+)
+
+from lean4py.galois_representations import (
+    GaloisRepresentation,
+    LAdicRepresentation,
+    WeilDeligneRepresentation,
+    FontaineTheory,
+)
+
+from lean4py.arithmetic_geometry import (
+    ArithmeticScheme,
+    NeronModel,
+    ArakelovGeometry,
+    MordellWeil,
+)
+
+from lean4py.commutative_algebra_advanced import (
+    Localization,
+    PrimaryDecomposition,
+    NoetherianRing,
+    IntegralClosure,
+    DedekindDomain,
+)
+
+from lean4py.homological_algebra_advanced import (
+    SpectralSequence,
+    DerivedFunctorAdvanced,
+    ExtTorAdvanced,
+    Hypercohomology,
+)
+
+from lean4py.algebraic_topology_advanced import (
+    FundamentalGroupoid,
+    CoveringSpace,
+    HomotopyGroup,
+    CellComplex,
+    EilenbergMacLane,
+)
+
+from lean4py.differential_geometry_advanced import (
+    Connection,
+    Curvature,
+    GeodesicAdvanced,
+    Holonomy,
+    CharacteristicClass,
+)
+
+from lean4py.set_theory_advanced import (
+    Ordinal,
+    Cardinal,
+    TransfiniteInduction,
+    WellOrdering,
+    AxiomOfChoice,
+)
+
+from lean4py.model_theory import (
+    Structure,
+    TypeSpace,
+    CompactnessTheorem,
+    LowenheimSkolem,
+    ElementaryExtension,
+)
+
+from lean4py.proof_theory import (
+    Sequent,
+    CutElimination,
+    Consistency,
+    Normalization,
+)
+
+from lean4py.type_theory_advanced import (
+    MartinLofType,
+    IdentityType,
+    UniversePolymorphism,
+    HeterogeneousEquality,
+)
+
+from lean4py.formal_languages import (
+    RegularLanguage,
+    ContextFreeGrammar,
+    ChomskyHierarchy,
+    PumpingLemma,
+)
+
+from lean4py.automata_theory_v134 import (
+    DFA,
+    NFA,
+    PushdownAutomaton,
+    TuringMachine,
+)
+
+from lean4py.computational_complexity_v134 import (
+    ComplexityClass,
+    NPCompleteness,
+    Reduction,
+    CookLevin,
+)
+
+from lean4py.lambda_calculus import (
+    LambdaTerm,
+    BetaReduction,
+    SimplyTypedLambda,
+    ChurchNumerals,
 )
